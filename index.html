@@ -6,585 +6,225 @@
 <title>⚽ Figus FWC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0e1a;
-    --surface: #111827;
-    --surface2: #1a2235;
-    --accent: #f59e0b;
-    --accent2: #10b981;
-    --accent3: #3b82f6;
-    --danger: #ef4444;
-    --text: #f1f5f9;
-    --muted: #64748b;
-    --border: #1e2d45;
-    --got: #10b981;
-    --missing: #334155;
-    --repeated: #f59e0b;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* Background pattern */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: 
-      radial-gradient(circle at 20% 20%, rgba(245,158,11,0.06) 0%, transparent 50%),
-      radial-gradient(circle at 80% 80%, rgba(59,130,246,0.06) 0%, transparent 50%),
-      repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 40px,
-        rgba(255,255,255,0.01) 40px,
-        rgba(255,255,255,0.01) 41px
-      );
-    pointer-events: none;
-    z-index: 0;
-  }
-
-  .container { position: relative; z-index: 1; }
-
-  /* HEADER */
-  header {
-    background: linear-gradient(135deg, #0f1929 0%, #1a2235 100%);
-    border-bottom: 2px solid var(--accent);
-    padding: 16px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    box-shadow: 0 4px 30px rgba(0,0,0,0.5);
-  }
-
-  .header-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28px;
-    letter-spacing: 2px;
-    color: var(--accent);
-    text-shadow: 0 0 20px rgba(245,158,11,0.4);
-  }
-
-  .logo span { color: var(--text); }
-
-  /* Global progress bar */
-  .global-progress {
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-
-  .progress-bar-wrap {
-    flex: 1;
-    height: 8px;
-    background: var(--border);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-
-  .progress-bar-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
-    border-radius: 99px;
-    transition: width 0.4s ease;
-  }
-
-  .progress-text {
-    font-size: 12px;
-    color: var(--muted);
-    white-space: nowrap;
-  }
-
-  .progress-text strong { color: var(--accent2); }
-
-  /* TABS */
-  .tabs {
-    display: flex;
-    gap: 4px;
-    padding: 12px 20px 0;
-    border-bottom: 1px solid var(--border);
-    background: var(--surface);
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .tabs::-webkit-scrollbar { display: none; }
-
-  .tab {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 14px;
-    letter-spacing: 1px;
-    padding: 8px 16px;
-    border-radius: 8px 8px 0 0;
-    cursor: pointer;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    white-space: nowrap;
-    transition: all 0.2s;
-    position: relative;
-  }
-
-  .tab:hover { color: var(--text); background: var(--surface2); }
-
-  .tab.active {
-    color: var(--accent);
-    background: var(--bg);
-    border-top: 2px solid var(--accent);
-  }
-
-  .tab .badge {
-    display: inline-block;
-    background: var(--accent);
-    color: #000;
-    font-size: 9px;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 99px;
-    margin-left: 4px;
-    vertical-align: middle;
-  }
-
-  /* VIEWS */
-  .view { display: none; padding: 16px 20px; }
-  .view.active { display: block; }
-
-  /* SEARCH & FILTER */
-  .controls {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
-    flex-wrap: wrap;
-  }
-
-  .search-box {
-    flex: 1;
-    min-width: 200px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 14px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  .search-box:focus { border-color: var(--accent); }
-  .search-box::placeholder { color: var(--muted); }
-
-  .filter-btn {
-    padding: 10px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.2s;
-    white-space: nowrap;
-  }
-  .filter-btn:hover, .filter-btn.active { 
-    border-color: var(--accent); 
-    color: var(--accent); 
-    background: rgba(245,158,11,0.08);
-  }
-
-  /* COUNTRY SECTION */
-  .country-section {
-    margin-bottom: 20px;
-    background: var(--surface);
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid var(--border);
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-
-  .country-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    background: var(--surface2);
-    cursor: pointer;
-    user-select: none;
-    gap: 10px;
-  }
-
-  .country-header:hover { background: #1e2d45; }
-
-  .country-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 18px;
-    letter-spacing: 1px;
-    color: var(--text);
-  }
-
-  .country-stats {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 12px;
-  }
-
-  .stat-pill {
-    padding: 2px 8px;
-    border-radius: 99px;
-    font-weight: 600;
-    font-size: 11px;
-  }
-  .pill-got { background: rgba(16,185,129,0.2); color: var(--got); }
-  .pill-missing { background: rgba(51,65,85,0.5); color: #94a3b8; }
-  .pill-rep { background: rgba(245,158,11,0.2); color: var(--accent); }
-
-  .mini-progress {
-    width: 80px;
-    height: 4px;
-    background: var(--border);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-  .mini-progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
-    border-radius: 99px;
-    transition: width 0.3s ease;
-  }
-
-  .chevron {
-    color: var(--muted);
-    font-size: 12px;
-    transition: transform 0.2s;
-  }
-  .country-section.collapsed .chevron { transform: rotate(-90deg); }
-
-  .stickers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
-    gap: 6px;
-    padding: 12px 16px;
-  }
-
-  .country-section.collapsed .stickers-grid { display: none; }
-
-  /* STICKER CARD */
-  .sticker {
-    position: relative;
-    aspect-ratio: 3/4;
-    border-radius: 8px;
-    border: 2px solid var(--missing);
-    background: var(--surface2);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.15s;
-    user-select: none;
-    overflow: hidden;
-  }
-
-  .sticker:hover { transform: scale(1.05); border-color: var(--muted); }
-
-  .sticker.got {
-    border-color: var(--got);
-    background: rgba(16,185,129,0.12);
-  }
-
-  .sticker.got::after {
-    content: '✓';
-    position: absolute;
-    top: 2px;
-    right: 4px;
-    font-size: 9px;
-    color: var(--got);
-    font-weight: 700;
-  }
-
-  .sticker-code {
-    font-size: 10px;
-    font-weight: 600;
-    color: var(--muted);
-    text-align: center;
-    line-height: 1.2;
-  }
-
-  .sticker.got .sticker-code { color: var(--got); }
-
-  /* Repeated badge */
-  .rep-btn {
-    position: absolute;
-    bottom: 2px;
-    right: 2px;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: var(--accent);
-    color: #000;
-    font-size: 9px;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 2;
-    transition: transform 0.1s;
-  }
-  .rep-btn:hover { transform: scale(1.2); }
-  .rep-btn.hidden { display: none; }
-
-  /* Right-click context menu */
-  .ctx-menu {
-    position: fixed;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 6px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-    z-index: 1000;
-    min-width: 160px;
-    display: none;
-  }
-  .ctx-menu.show { display: block; }
-
-  .ctx-item {
-    padding: 8px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: background 0.1s;
-  }
-  .ctx-item:hover { background: var(--border); }
-  .ctx-item.danger { color: var(--danger); }
-  .ctx-item.success { color: var(--got); }
-  .ctx-item.warn { color: var(--accent); }
-
-  /* REPETIDAS VIEW */
-  .rep-list { display: flex; flex-direction: column; gap: 12px; }
-
-  .rep-country-block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
-
-  .rep-country-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 16px;
-    padding: 10px 14px;
-    background: var(--surface2);
-    border-bottom: 1px solid var(--border);
-    letter-spacing: 1px;
-  }
-
-  .rep-stickers {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    padding: 12px 14px;
-  }
-
-  .rep-tag {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(245,158,11,0.15);
-    border: 1px solid rgba(245,158,11,0.3);
-    border-radius: 8px;
-    padding: 4px 10px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--accent);
-  }
-
-  .rep-count-ctrl {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .rep-btn-ctrl {
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    border: none;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.1s;
-  }
-  .rep-minus { background: rgba(239,68,68,0.2); color: var(--danger); }
-  .rep-plus { background: rgba(16,185,129,0.2); color: var(--got); }
-  .rep-minus:hover { background: var(--danger); color: white; }
-  .rep-plus:hover { background: var(--got); color: white; }
-  .rep-count { font-size: 13px; color: var(--text); min-width: 14px; text-align: center; }
-
-  .empty-state {
-    text-align: center;
-    padding: 60px 20px;
-    color: var(--muted);
-  }
-  .empty-state .emoji { font-size: 48px; display: block; margin-bottom: 12px; }
-  .empty-state p { font-size: 14px; }
-
-  /* PROGRESS VIEW */
-  .progress-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 10px;
-  }
-
-  .prog-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-    transition: border-color 0.2s;
-    cursor: pointer;
-  }
-  .prog-card:hover { border-color: var(--accent); }
-  .prog-card.complete { border-color: var(--got); background: rgba(16,185,129,0.05); }
-
-  .prog-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
-
-  .prog-country { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 1px; }
-  .prog-pct { font-size: 13px; font-weight: 700; color: var(--accent2); }
-  .prog-card.complete .prog-pct { color: var(--got); }
-
-  .prog-bar-wrap {
-    height: 6px;
-    background: var(--border);
-    border-radius: 99px;
-    overflow: hidden;
-    margin-bottom: 6px;
-  }
-  .prog-bar-inner {
-    height: 100%;
-    border-radius: 99px;
-    background: linear-gradient(90deg, var(--accent2), var(--accent));
-    transition: width 0.4s ease;
-  }
-  .prog-card.complete .prog-bar-inner { background: var(--got); }
-
-  .prog-sub {
-    font-size: 11px;
-    color: var(--muted);
-    display: flex;
-    gap: 10px;
-  }
-
-  /* Sort bar */
-  .sort-bar {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 14px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-  .sort-label { font-size: 12px; color: var(--muted); }
-  .sort-btn {
-    padding: 4px 12px;
-    border-radius: 99px;
-    border: 1px solid var(--border);
-    background: var(--surface);
-    color: var(--muted);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .sort-btn.active, .sort-btn:hover { border-color: var(--accent2); color: var(--accent2); }
-
-  /* Summary bar */
-  .summary-bar {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-  .sum-item {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 10px 16px;
-    text-align: center;
-    flex: 1;
-    min-width: 100px;
-  }
-  .sum-val { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 1px; }
-  .sum-lbl { font-size: 11px; color: var(--muted); }
-  .sum-green { color: var(--got); }
-  .sum-yellow { color: var(--accent); }
-  .sum-blue { color: var(--accent3); }
-  .sum-red { color: var(--danger); }
-
-  /* Scrollbar */
-  ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: var(--bg); }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-  @media (max-width: 500px) {
-    .stickers-grid { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); gap: 4px; }
-    .logo { font-size: 22px; }
-  }
+  :root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--accent:#f59e0b;--accent2:#10b981;--accent3:#3b82f6;--danger:#ef4444;--text:#f1f5f9;--muted:#64748b;--border:#1e2d45;--got:#10b981;--missing:#334155;}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 20%,rgba(245,158,11,0.06) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(59,130,246,0.06) 0%,transparent 50%),repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.01) 40px,rgba(255,255,255,0.01) 41px);pointer-events:none;z-index:0;}
+  .container{position:relative;z-index:1;}
+  header{background:linear-gradient(135deg,#0f1929 0%,#1a2235 100%);border-bottom:2px solid var(--accent);padding:16px 20px;position:sticky;top:0;z-index:100;box-shadow:0 4px 30px rgba(0,0,0,0.5);}
+  .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+  .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--accent);text-shadow:0 0 20px rgba(245,158,11,0.4);}
+  .logo span{color:var(--text);}
+  .global-progress{margin-top:12px;display:flex;align-items:center;gap:12px;}
+  .progress-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:99px;overflow:hidden;}
+  .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width 0.4s ease;}
+  .progress-text{font-size:12px;color:var(--muted);white-space:nowrap;}
+  .progress-text strong{color:var(--accent2);}
+  .tabs{display:flex;gap:4px;padding:12px 20px 0;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;scrollbar-width:none;}
+  .tabs::-webkit-scrollbar{display:none;}
+  .tab{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:8px 16px;border-radius:8px 8px 0 0;cursor:pointer;border:none;background:transparent;color:var(--muted);white-space:nowrap;transition:all 0.2s;}
+  .tab:hover{color:var(--text);background:var(--surface2);}
+  .tab.active{color:var(--accent);background:var(--bg);border-top:2px solid var(--accent);}
+  .tab .badge{display:inline-block;background:var(--accent);color:#000;font-size:9px;font-family:'DM Sans',sans-serif;font-weight:700;padding:1px 5px;border-radius:99px;margin-left:4px;vertical-align:middle;}
+  .view{display:none;padding:16px 20px;}
+  .view.active{display:block;}
+  .controls{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+  .search-box{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;}
+  .search-box:focus{border-color:var(--accent);}
+  .search-box::placeholder{color:var(--muted);}
+  .filter-btn{padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+  .filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,158,11,0.08);}
+  .country-section{margin-bottom:20px;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);animation:fadeIn 0.3s ease;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .country-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface2);cursor:pointer;user-select:none;gap:10px;}
+  .country-header:hover{background:#1e2d45;}
+  .country-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--text);}
+  .country-stats{display:flex;align-items:center;gap:10px;font-size:12px;}
+  .stat-pill{padding:2px 8px;border-radius:99px;font-weight:600;font-size:11px;}
+  .pill-got{background:rgba(16,185,129,0.2);color:var(--got);}
+  .pill-missing{background:rgba(51,65,85,0.5);color:#94a3b8;}
+  .pill-rep{background:rgba(245,158,11,0.2);color:var(--accent);}
+  .mini-progress{width:80px;height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
+  .mini-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width 0.3s ease;}
+  .chevron{color:var(--muted);font-size:12px;transition:transform 0.2s;}
+  .country-section.collapsed .chevron{transform:rotate(-90deg);}
+  .stickers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:6px;padding:12px 16px;}
+  .country-section.collapsed .stickers-grid{display:none;}
+  .sticker{position:relative;aspect-ratio:3/4;border-radius:8px;border:2px solid var(--missing);background:var(--surface2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;user-select:none;overflow:hidden;}
+  .sticker:hover{transform:scale(1.05);border-color:var(--muted);}
+  .sticker.got{border-color:var(--got);background:rgba(16,185,129,0.12);}
+  .sticker.got::after{content:'✓';position:absolute;top:2px;right:4px;font-size:9px;color:var(--got);font-weight:700;}
+  .sticker-code{font-size:10px;font-weight:600;color:var(--muted);text-align:center;line-height:1.2;}
+  .sticker.got .sticker-code{color:var(--got);}
+  .rep-btn{position:absolute;bottom:2px;right:2px;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#000;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;z-index:2;}
+  .ctx-menu{position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 8px 32px rgba(0,0,0,0.5);z-index:1000;min-width:160px;display:none;}
+  .ctx-menu.show{display:block;}
+  .ctx-item{padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;transition:background 0.1s;}
+  .ctx-item:hover{background:var(--border);}
+  .ctx-item.danger{color:var(--danger);}
+  .ctx-item.success{color:var(--got);}
+  .ctx-item.warn{color:var(--accent);}
+  .rep-country-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;}
+  .rep-country-title{font-family:'Bebas Neue',sans-serif;font-size:16px;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);letter-spacing:1px;}
+  .rep-stickers{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;}
+  .rep-tag{display:flex;align-items:center;gap:6px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--accent);}
+  .rep-count-ctrl{display:flex;align-items:center;gap:4px;}
+  .rep-btn-ctrl{width:18px;height:18px;border-radius:50%;border:none;cursor:pointer;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all 0.1s;}
+  .rep-minus{background:rgba(239,68,68,0.2);color:var(--danger);}
+  .rep-plus{background:rgba(16,185,129,0.2);color:var(--got);}
+  .rep-minus:hover{background:var(--danger);color:white;}
+  .rep-plus:hover{background:var(--got);color:white;}
+  .rep-count{font-size:13px;color:var(--text);min-width:14px;text-align:center;}
+  .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+  .empty-state .emoji{font-size:48px;display:block;margin-bottom:12px;}
+  .progress-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;}
+  .prog-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;transition:border-color 0.2s;cursor:pointer;}
+  .prog-card:hover{border-color:var(--accent);}
+  .prog-card.complete{border-color:var(--got);background:rgba(16,185,129,0.05);}
+  .prog-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+  .prog-country{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;}
+  .prog-pct{font-size:13px;font-weight:700;color:var(--accent2);}
+  .prog-card.complete .prog-pct{color:var(--got);}
+  .prog-bar-wrap{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:6px;}
+  .prog-bar-inner{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width 0.4s ease;}
+  .prog-card.complete .prog-bar-inner{background:var(--got);}
+  .prog-sub{font-size:11px;color:var(--muted);display:flex;gap:10px;}
+  .sort-bar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
+  .sort-label{font-size:12px;color:var(--muted);}
+  .sort-btn{padding:4px 12px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:12px;cursor:pointer;transition:all 0.15s;}
+  .sort-btn.active,.sort-btn:hover{border-color:var(--accent2);color:var(--accent2);}
+  .summary-bar{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
+  .sum-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center;flex:1;min-width:100px;}
+  .sum-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;}
+  .sum-lbl{font-size:11px;color:var(--muted);}
+  .sum-green{color:var(--got);}.sum-yellow{color:var(--accent);}.sum-blue{color:var(--accent3);}.sum-red{color:var(--danger);}
+  ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+  @media(max-width:500px){.stickers-grid{grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:4px;}.logo{font-size:22px;}.mini-progress{display:none;}}
+  /* Share bar */
+  .share-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .share-btn{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;transition:all 0.2s;}
+  .share-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.3);}
+  .share-btn.wa{background:#25D366;color:#fff;}
+  .share-btn.wa:hover{background:#20bd5a;}
+  .share-btn.pdf{background:var(--accent);color:#000;}
+  .share-btn.pdf:hover{background:#e08e00;}
+  .share-btn.copy{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+  .share-btn.copy:hover{border-color:var(--accent3);color:var(--accent3);}
+  /* Toast */
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:var(--text);padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;transition:all 0.3s;z-index:9999;border:1px solid var(--border);pointer-events:none;}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCXNc9b4tlkctn4QaU-4v9aF9mH2ENOiqw",
+  authDomain: "figus-fwc2026.firebaseapp.com",
+  projectId: "figus-fwc2026",
+  storageBucket: "figus-fwc2026.firebasestorage.app",
+  messagingSenderId: "703428765017",
+  appId: "1:703428765017:web:5f3b0de7f2c4f1df455848"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const DOC_REF = doc(db, "albums", "martin");
+
+// Sync indicator
+function setSyncStatus(status) {
+  const el = document.getElementById('sync-status');
+  if (!el) return;
+  if (status === 'syncing') { el.textContent = '⏳ Guardando...'; el.style.color = 'var(--accent)'; }
+  else if (status === 'ok') { el.textContent = '☁️ Sincronizado'; el.style.color = 'var(--accent2)'; }
+  else if (status === 'offline') { el.textContent = '📴 Sin conexión'; el.style.color = 'var(--danger)'; }
+}
+
+// Save to Firestore (debounced)
+let saveTimer = null;
+window.saveToFirestore = function() {
+  setSyncStatus('syncing');
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(async () => {
+    try {
+      await setDoc(DOC_REF, {
+        got: state.got,
+        repeated: state.repeated,
+        updatedAt: Date.now()
+      });
+      setSyncStatus('ok');
+      // also update localStorage as cache
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch(e) {
+      console.error('Firestore save error:', e);
+      setSyncStatus('offline');
+    }
+  }, 800);
+};
+
+// Listen for real-time changes from other devices
+let isFirstLoad = true;
+onSnapshot(DOC_REF, (snap) => {
+  if (snap.exists()) {
+    const data = snap.data();
+    // Merge: don't overwrite local changes mid-session on first load
+    if (isFirstLoad) {
+      state.got = data.got || {};
+      state.repeated = data.repeated || {};
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      refreshAll();
+      setSyncStatus('ok');
+      isFirstLoad = false;
+      showToast('☁️ Datos sincronizados desde la nube');
+    } else {
+      // Real-time update from another device
+      state.got = data.got || {};
+      state.repeated = data.repeated || {};
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      refreshAll();
+      setSyncStatus('ok');
+    }
+  } else {
+    // First time ever: push local state to Firestore
+    isFirstLoad = false;
+    window.saveToFirestore();
+  }
+}, (err) => {
+  console.error('Firestore listen error:', err);
+  setSyncStatus('offline');
+  isFirstLoad = false;
+});
+
+setSyncStatus('syncing');
+</script>
 </head>
 <body>
 <div class="container">
-
 <header>
   <div class="header-top">
     <div class="logo">⚽ Figus <span>FWC 2026</span></div>
-    <div class="progress-text">
-      <strong id="hdr-got">0</strong> / <span id="hdr-total">0</span> conseguidas
-    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
+    <div class="progress-text"><strong id="hdr-got">0</strong> / <span id="hdr-total">0</span> conseguidas</div>
+    <div id="sync-status" style="font-size:11px;color:var(--muted);">⏳ Conectando...</div>
+  </div>
   </div>
   <div class="global-progress">
-    <div class="progress-bar-wrap">
-      <div class="progress-bar-fill" id="global-bar" style="width:0%"></div>
-    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="global-bar" style="width:0%"></div></div>
     <div class="progress-text" id="global-pct">0%</div>
   </div>
 </header>
-
 <div class="tabs">
-  <button class="tab active" onclick="showView('album')">📚 Álbum <span class="badge" id="tab-missing-badge">0</span></button>
-  <button class="tab" onclick="showView('repetidas')">🔁 Repetidas <span class="badge" id="tab-rep-badge" style="background:var(--accent)">0</span></button>
-  <button class="tab" onclick="showView('progreso')">📊 Progreso</button>
+  <button class="tab active" onclick="showView('album',this)">📚 Álbum <span class="badge" id="tab-missing-badge">0</span></button>
+  <button class="tab" onclick="showView('repetidas',this)">🔁 Repetidas <span class="badge" id="tab-rep-badge" style="background:var(--accent)">0</span></button>
+  <button class="tab" onclick="showView('progreso',this)">📊 Progreso</button>
 </div>
-
-<!-- ALBUM VIEW -->
 <div class="view active" id="view-album">
+  <div class="share-bar">
+    <button class="share-btn wa" onclick="shareWhatsapp()">📲 WhatsApp</button>
+    <button class="share-btn pdf-btn" onclick="sharePDF()">📄 Bajar PDF</button>
+    <button class="share-btn copy-btn" onclick="copyText()">📋 Copiar texto</button>
+  </div>
   <div class="controls">
     <input class="search-box" type="text" placeholder="🔍 Buscar selección..." id="search-input" oninput="renderAlbum()">
     <button class="filter-btn active" id="filter-all" onclick="setFilter('all')">Todas</button>
@@ -593,13 +233,7 @@
   </div>
   <div id="album-container"></div>
 </div>
-
-<!-- REPETIDAS VIEW -->
-<div class="view" id="view-repetidas">
-  <div id="rep-container"></div>
-</div>
-
-<!-- PROGRESO VIEW -->
+<div class="view" id="view-repetidas"><div id="rep-container"></div></div>
 <div class="view" id="view-progreso">
   <div class="summary-bar">
     <div class="sum-item"><div class="sum-val sum-green" id="sum-got">0</div><div class="sum-lbl">Conseguidas</div></div>
@@ -616,416 +250,248 @@
   </div>
   <div class="progress-grid" id="prog-container"></div>
 </div>
-
 </div>
-
-<!-- Context menu -->
 <div class="ctx-menu" id="ctx-menu">
   <div class="ctx-item success" id="ctx-toggle"><span>✓</span> <span id="ctx-toggle-text">Marcar conseguida</span></div>
   <div class="ctx-item warn" id="ctx-add-rep"><span>🔁</span> Agregar repetida</div>
   <div class="ctx-item danger" id="ctx-remove-rep" style="display:none"><span>✕</span> Quitar repetida</div>
 </div>
-
 <script>
-// ========================
-// DATA
-// ========================
-const RAW = {
-  "FWC 2026": ["00","FWC 1","FWC 2","FWC 3","FWC 4","FWC 5","FWC 6","FWC 7","FWC 8"],
-  "FIFA MUSEUM": ["FWC 9","FWC 10","FWC 11","FWC 12","FWC 13","FWC 14","FWC 15","FWC 16","FWC 17","FWC 18","FWC 19"],
-  "México": Array.from({length:20},(_,i)=>`MEX ${i+1}`),
-  "Sudáfrica": Array.from({length:20},(_,i)=>`RSA ${i+1}`),
-  "Corea del Sur": Array.from({length:20},(_,i)=>`KOR ${i+1}`),
-  "Rep. Checa": Array.from({length:20},(_,i)=>`CZE ${i+1}`),
-  "Canadá": Array.from({length:20},(_,i)=>`CAN ${i+1}`),
-  "Bosnia y Herz.": Array.from({length:20},(_,i)=>`BIH ${i+1}`),
-  "Qatar": Array.from({length:20},(_,i)=>`QAT ${i+1}`),
-  "Suiza": Array.from({length:20},(_,i)=>`SUI ${i+1}`),
-  "Brasil": Array.from({length:20},(_,i)=>`BRA ${i+1}`),
-  "Marruecos": Array.from({length:20},(_,i)=>`MAR ${i+1}`),
-  "Haití": Array.from({length:20},(_,i)=>`HAI ${i+1}`),
-  "Escocia": Array.from({length:20},(_,i)=>`SCO ${i+1}`),
-  "Estados Unidos": Array.from({length:20},(_,i)=>`USA ${i+1}`),
-  "Paraguay": Array.from({length:20},(_,i)=>`PAR ${i+1}`),
-  "Australia": Array.from({length:20},(_,i)=>`AUS ${i+1}`),
-  "Turquía": Array.from({length:20},(_,i)=>`TUR ${i+1}`),
-  "Alemania": Array.from({length:20},(_,i)=>`GER ${i+1}`),
-  "Curazao": Array.from({length:20},(_,i)=>`CUW ${i+1}`),
-  "Costa de Marfil": Array.from({length:20},(_,i)=>`CIV ${i+1}`),
-  "Ecuador": Array.from({length:20},(_,i)=>`ECU ${i+1}`),
-  "Países Bajos": Array.from({length:20},(_,i)=>`NED ${i+1}`),
-  "Japón": Array.from({length:20},(_,i)=>`JPN ${i+1}`),
-  "Suecia": Array.from({length:20},(_,i)=>`SWE ${i+1}`),
-  "Túnez": Array.from({length:20},(_,i)=>`TUN ${i+1}`),
-  "Coca-Cola": Array.from({length:12},(_,i)=>`CC ${i+1}`),
-  "Bélgica": Array.from({length:20},(_,i)=>`BEL ${i+1}`),
-  "Egipto": Array.from({length:20},(_,i)=>`EGY ${i+1}`),
-  "Irán": Array.from({length:20},(_,i)=>`IRN ${i+1}`),
-  "Nueva Zelanda": Array.from({length:20},(_,i)=>`NZL ${i+1}`),
-  "España": Array.from({length:20},(_,i)=>`ESP ${i+1}`),
-  "Cabo Verde": Array.from({length:20},(_,i)=>`CPV ${i+1}`),
-  "Arabia Saudita": Array.from({length:20},(_,i)=>`KSA ${i+1}`),
-  "Uruguay": Array.from({length:20},(_,i)=>`URU ${i+1}`),
-  "Francia": Array.from({length:20},(_,i)=>`FRA ${i+1}`),
-  "Senegal": Array.from({length:20},(_,i)=>`SEN ${i+1}`),
-  "Irak": Array.from({length:20},(_,i)=>`IRQ ${i+1}`),
-  "Noruega": Array.from({length:20},(_,i)=>`NOR ${i+1}`),
-  "Argentina": Array.from({length:20},(_,i)=>`ARG ${i+1}`),
-  "Argelia": Array.from({length:20},(_,i)=>`ALG ${i+1}`),
-  "Austria": Array.from({length:20},(_,i)=>`AUT ${i+1}`),
-  "Jordania": Array.from({length:20},(_,i)=>`JOR ${i+1}`),
-  "Portugal": Array.from({length:20},(_,i)=>`POR ${i+1}`),
-  "Rep. D. Congo": Array.from({length:20},(_,i)=>`COD ${i+1}`),
-  "Uzbekistán": Array.from({length:20},(_,i)=>`UZB ${i+1}`),
-  "Colombia": Array.from({length:20},(_,i)=>`COL ${i+1}`),
-  "Inglaterra": Array.from({length:20},(_,i)=>`ENG ${i+1}`),
-  "Croacia": Array.from({length:20},(_,i)=>`CRO ${i+1}`),
-  "Ghana": Array.from({length:20},(_,i)=>`GHA ${i+1}`),
-  "Panamá": Array.from({length:20},(_,i)=>`PAN ${i+1}`),
-};
+const RAW={"FWC 2026":["00","FWC 1","FWC 2","FWC 3","FWC 4","FWC 5","FWC 6","FWC 7","FWC 8"],"FIFA MUSEUM":["FWC 9","FWC 10","FWC 11","FWC 12","FWC 13","FWC 14","FWC 15","FWC 16","FWC 17","FWC 18","FWC 19"],"México":Array.from({length:20},(_,i)=>`MEX ${i+1}`),"Sudáfrica":Array.from({length:20},(_,i)=>`RSA ${i+1}`),"Corea del Sur":Array.from({length:20},(_,i)=>`KOR ${i+1}`),"Rep. Checa":Array.from({length:20},(_,i)=>`CZE ${i+1}`),"Canadá":Array.from({length:20},(_,i)=>`CAN ${i+1}`),"Bosnia y Herz.":Array.from({length:20},(_,i)=>`BIH ${i+1}`),"Qatar":Array.from({length:20},(_,i)=>`QAT ${i+1}`),"Suiza":Array.from({length:20},(_,i)=>`SUI ${i+1}`),"Brasil":Array.from({length:20},(_,i)=>`BRA ${i+1}`),"Marruecos":Array.from({length:20},(_,i)=>`MAR ${i+1}`),"Haití":Array.from({length:20},(_,i)=>`HAI ${i+1}`),"Escocia":Array.from({length:20},(_,i)=>`SCO ${i+1}`),"Estados Unidos":Array.from({length:20},(_,i)=>`USA ${i+1}`),"Paraguay":Array.from({length:20},(_,i)=>`PAR ${i+1}`),"Australia":Array.from({length:20},(_,i)=>`AUS ${i+1}`),"Turquía":Array.from({length:20},(_,i)=>`TUR ${i+1}`),"Alemania":Array.from({length:20},(_,i)=>`GER ${i+1}`),"Curazao":Array.from({length:20},(_,i)=>`CUW ${i+1}`),"Costa de Marfil":Array.from({length:20},(_,i)=>`CIV ${i+1}`),"Ecuador":Array.from({length:20},(_,i)=>`ECU ${i+1}`),"Países Bajos":Array.from({length:20},(_,i)=>`NED ${i+1}`),"Japón":Array.from({length:20},(_,i)=>`JPN ${i+1}`),"Suecia":Array.from({length:20},(_,i)=>`SWE ${i+1}`),"Túnez":Array.from({length:20},(_,i)=>`TUN ${i+1}`),"Coca-Cola":Array.from({length:12},(_,i)=>`CC ${i+1}`),"Bélgica":Array.from({length:20},(_,i)=>`BEL ${i+1}`),"Egipto":Array.from({length:20},(_,i)=>`EGY ${i+1}`),"Irán":Array.from({length:20},(_,i)=>`IRN ${i+1}`),"Nueva Zelanda":Array.from({length:20},(_,i)=>`NZL ${i+1}`),"España":Array.from({length:20},(_,i)=>`ESP ${i+1}`),"Cabo Verde":Array.from({length:20},(_,i)=>`CPV ${i+1}`),"Arabia Saudita":Array.from({length:20},(_,i)=>`KSA ${i+1}`),"Uruguay":Array.from({length:20},(_,i)=>`URU ${i+1}`),"Francia":Array.from({length:20},(_,i)=>`FRA ${i+1}`),"Senegal":Array.from({length:20},(_,i)=>`SEN ${i+1}`),"Irak":Array.from({length:20},(_,i)=>`IRQ ${i+1}`),"Noruega":Array.from({length:20},(_,i)=>`NOR ${i+1}`),"Argentina":Array.from({length:20},(_,i)=>`ARG ${i+1}`),"Argelia":Array.from({length:20},(_,i)=>`ALG ${i+1}`),"Austria":Array.from({length:20},(_,i)=>`AUT ${i+1}`),"Jordania":Array.from({length:20},(_,i)=>`JOR ${i+1}`),"Portugal":Array.from({length:20},(_,i)=>`POR ${i+1}`),"Rep. D. Congo":Array.from({length:20},(_,i)=>`COD ${i+1}`),"Uzbekistán":Array.from({length:20},(_,i)=>`UZB ${i+1}`),"Colombia":Array.from({length:20},(_,i)=>`COL ${i+1}`),"Inglaterra":Array.from({length:20},(_,i)=>`ENG ${i+1}`),"Croacia":Array.from({length:20},(_,i)=>`CRO ${i+1}`),"Ghana":Array.from({length:20},(_,i)=>`GHA ${i+1}`),"Panamá":Array.from({length:20},(_,i)=>`PAN ${i+1}`)};
 
-// ========================
-// STATE
-// ========================
-const STORAGE_KEY = 'figus_fwc2026_v1';
+const INITIAL_GOT={"MEX 6":true,"MEX 7":true,"MEX 8":true,"MEX 10":true,"MEX 11":true,"MEX 15":true,"MEX 16":true,"MEX 19":true,"MEX 20":true,"RSA 20":true,"KOR 9":true,"CAN 17":true,"QAT 4":true,"QAT 12":true,"QAT 16":true,"QAT 17":true,"QAT 19":true,"SUI 5":true,"SUI 6":true,"SUI 10":true,"SUI 14":true,"SUI 15":true,"SUI 18":true,"BRA 2":true,"BRA 12":true,"BRA 16":true,"BRA 17":true,"BRA 20":true,"MAR 14":true,"MAR 18":true,"HAI 18":true,"SCO 1":true,"SCO 2":true,"SCO 3":true,"SCO 8":true,"SCO 12":true,"SCO 15":true,"SCO 20":true,"USA 10":true,"PAR 1":true,"PAR 5":true,"PAR 6":true,"PAR 7":true,"PAR 9":true,"PAR 17":true,"PAR 18":true,"PAR 19":true,"AUS 2":true,"AUS 5":true,"AUS 6":true,"AUS 7":true,"AUS 8":true,"AUS 11":true,"AUS 12":true,"AUS 16":true,"AUS 17":true,"AUS 20":true,"GER 2":true,"GER 5":true,"GER 6":true,"GER 9":true,"GER 18":true,"GER 19":true,"GER 20":true,"CUW 2":true,"CUW 5":true,"CUW 9":true,"CUW 10":true,"CUW 14":true,"CUW 15":true,"CUW 18":true,"CUW 19":true,"CUW 20":true,"CIV 2":true,"CIV 4":true,"CIV 6":true,"CIV 7":true,"CIV 17":true,"ECU 6":true,"ECU 7":true,"ECU 9":true,"ECU 11":true,"ECU 12":true,"ECU 14":true,"ECU 15":true,"ECU 16":true,"ECU 17":true,"ECU 20":true,"NED 2":true,"NED 5":true,"NED 6":true,"NED 9":true,"NED 10":true,"NED 12":true,"NED 14":true,"NED 15":true,"JPN 2":true,"JPN 4":true,"TUN 3":true,"TUN 4":true,"TUN 5":true,"TUN 6":true,"TUN 8":true,"TUN 9":true,"TUN 10":true,"TUN 16":true,"TUN 17":true,"TUN 18":true,"CC 2":true,"CC 4":true,"CC 5":true,"CC 6":true,"BEL 1":true,"BEL 3":true,"BEL 4":true,"BEL 5":true,"BEL 7":true,"BEL 9":true,"BEL 10":true,"BEL 12":true,"BEL 15":true,"EGY 3":true,"EGY 4":true,"EGY 11":true,"EGY 15":true,"IRN 2":true,"IRN 8":true,"IRN 12":true,"IRN 17":true,"ESP 2":true,"ESP 9":true,"ESP 11":true,"ESP 14":true,"ESP 18":true,"ESP 20":true,"CPV 2":true,"CPV 5":true,"CPV 9":true,"CPV 10":true,"CPV 14":true,"CPV 18":true,"CPV 20":true,"URU 2":true,"URU 3":true,"URU 8":true,"URU 10":true,"FRA 1":true,"FRA 2":true,"FRA 4":true,"FRA 5":true,"FRA 7":true,"FRA 12":true,"FRA 16":true,"FRA 17":true,"FRA 20":true,"SEN 1":true,"SEN 2":true,"SEN 3":true,"SEN 7":true,"SEN 15":true,"SEN 20":true,"ARG 12":true,"ARG 19":true,"ALG 2":true,"ALG 4":true,"ALG 5":true,"ALG 9":true,"AUT 5":true,"AUT 9":true,"AUT 14":true,"AUT 18":true,"JOR 3":true,"JOR 5":true,"JOR 7":true,"JOR 9":true,"JOR 11":true,"JOR 15":true,"JOR 16":true,"JOR 19":true,"POR 2":true,"POR 3":true,"POR 4":true,"POR 6":true,"POR 7":true,"POR 11":true,"POR 16":true,"POR 20":true,"UZB 1":true,"UZB 15":true,"COL 1":true,"COL 2":true,"COL 3":true,"COL 4":true,"COL 5":true,"COL 7":true,"COL 8":true,"COL 11":true,"COL 12":true,"COL 16":true,"COL 20":true,"ENG 2":true,"ENG 4":true,"ENG 5":true,"ENG 9":true,"ENG 10":true,"ENG 17":true,"CRO 1":true,"CRO 2":true,"CRO 5":true,"CRO 6":true,"CRO 9":true,"CRO 10":true,"CRO 16":true,"GHA 3":true,"GHA 4":true,"GHA 6":true,"GHA 7":true,"GHA 8":true,"GHA 10":true,"GHA 15":true};
 
-function loadState() {
-  try {
-    const s = localStorage.getItem(STORAGE_KEY);
-    return s ? JSON.parse(s) : { got: {}, repeated: {} };
-  } catch { return { got: {}, repeated: {} }; }
+const STORAGE_KEY='figus_fwc2026_v2';
+function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)return JSON.parse(s);return{got:{...INITIAL_GOT},repeated:{}};}catch{return{got:{...INITIAL_GOT},repeated:{}};}}
+function saveState(){
+  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+  if(typeof window.saveToFirestore==='function') window.saveToFirestore();
 }
+let state=loadState();
+let currentFilter='all',currentSortProg='alpha',collapsedSections={},contextTarget=null;
+function isGot(c){return!!state.got[c];}
+function getRep(c){return state.repeated[c]||0;}
+function totalStickers(){return Object.values(RAW).flat().length;}
+function gotCount(){return Object.keys(state.got).filter(k=>state.got[k]).length;}
+function repCount(){return Object.values(state.repeated).reduce((a,b)=>a+b,0);}
+function toggleGot(c){if(state.got[c])delete state.got[c];else state.got[c]=true;saveState();refreshAll();}
+function addRep(c){state.repeated[c]=(state.repeated[c]||0)+1;saveState();renderRepetidas();updateHeader();updateTabBadges();}
+function showView(name,tabEl){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('view-'+name).classList.add('active');if(tabEl)tabEl.classList.add('active');if(name==='repetidas')renderRepetidas();if(name==='progreso')renderProgreso();}
+function setFilter(f){currentFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));document.getElementById('filter-'+f).classList.add('active');renderAlbum();}
+function getRepCountry(country){return(RAW[country]||[]).reduce((s,c)=>s+getRep(c),0);}
 
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
-
-let state = loadState();
-// got: { "ARG 1": true, ... }
-// repeated: { "ARG 1": 2, ... }  (count of extra copies)
-
-let currentFilter = 'all';
-let currentSortProg = 'alpha';
-let collapsedSections = {};
-let contextTarget = null;
-
-// ========================
-// HELPERS
-// ========================
-function isGot(code) { return !!state.got[code]; }
-function getRep(code) { return state.repeated[code] || 0; }
-function totalStickers() { return Object.values(RAW).flat().length; }
-function gotCount() { return Object.keys(state.got).filter(k => state.got[k]).length; }
-function repCount() { return Object.values(state.repeated).reduce((a,b)=>a+b,0); }
-
-function toggleGot(code) {
-  if (state.got[code]) {
-    delete state.got[code];
-  } else {
-    state.got[code] = true;
-  }
-  saveState();
-  refreshAll();
-}
-
-function addRep(code) {
-  state.repeated[code] = (state.repeated[code] || 0) + 1;
-  saveState();
-  renderRepetidas();
-  updateHeader();
-  updateTabBadges();
-}
-
-function removeRep(code) {
-  if (state.repeated[code] > 1) {
-    state.repeated[code]--;
-  } else {
-    delete state.repeated[code];
-  }
-  saveState();
-  renderRepetidas();
-  updateHeader();
-  updateTabBadges();
-}
-
-// ========================
-// VIEWS
-// ========================
-function showView(name) {
-  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('view-' + name).classList.add('active');
-  event.target.classList.add('active');
-  if (name === 'repetidas') renderRepetidas();
-  if (name === 'progreso') renderProgreso();
-}
-
-// ========================
-// ALBUM
-// ========================
-function setFilter(f) {
-  currentFilter = f;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('filter-' + f).classList.add('active');
-  renderAlbum();
-}
-
-function renderAlbum() {
-  const q = document.getElementById('search-input').value.toLowerCase();
-  const container = document.getElementById('album-container');
-  container.innerHTML = '';
-
-  for (const [country, stickers] of Object.entries(RAW)) {
-    if (q && !country.toLowerCase().includes(q)) continue;
-
-    const filteredStickers = stickers.filter(code => {
-      if (currentFilter === 'missing') return !isGot(code);
-      if (currentFilter === 'got') return isGot(code);
-      return true;
-    });
-
-    if (filteredStickers.length === 0) continue;
-
-    const gotC = stickers.filter(c => isGot(c)).length;
-    const total = stickers.length;
-    const pct = Math.round(gotC / total * 100);
-    const isCollapsed = !!collapsedSections[country];
-
-    const section = document.createElement('div');
-    section.className = 'country-section' + (isCollapsed ? ' collapsed' : '');
-    section.innerHTML = `
-      <div class="country-header" onclick="toggleCollapse('${country}', this.closest('.country-section'))">
-        <div class="country-name">${country}</div>
-        <div class="country-stats">
-          <span class="stat-pill pill-got">${gotC}✓</span>
-          <span class="stat-pill pill-missing">${total - gotC} faltan</span>
-          ${getRep_country(country) > 0 ? `<span class="stat-pill pill-rep">🔁${getRep_country(country)}</span>` : ''}
-          <div class="mini-progress"><div class="mini-progress-fill" style="width:${pct}%"></div></div>
-          <span style="font-size:11px;color:var(--muted)">${pct}%</span>
-          <span class="chevron">▼</span>
-        </div>
-      </div>
-      <div class="stickers-grid" id="grid-${country.replace(/[^a-z0-9]/gi,'_')}"></div>
-    `;
+function renderAlbum(){
+  const q=document.getElementById('search-input').value.toLowerCase();
+  const container=document.getElementById('album-container');
+  container.innerHTML='';
+  for(const[country,stickers]of Object.entries(RAW)){
+    if(q&&!country.toLowerCase().includes(q))continue;
+    const fs=stickers.filter(c=>{if(currentFilter==='missing')return!isGot(c);if(currentFilter==='got')return isGot(c);return true;});
+    if(fs.length===0)continue;
+    const gotC=stickers.filter(c=>isGot(c)).length,total=stickers.length,pct=Math.round(gotC/total*100);
+    const isCollapsed=!!collapsedSections[country];
+    const section=document.createElement('div');
+    section.className='country-section'+(isCollapsed?' collapsed':'');
+    section.innerHTML=`<div class="country-header" onclick="toggleCollapse('${country.replace(/'/g,"\\'")}',this.closest('.country-section'))"><div class="country-name">${country}</div><div class="country-stats"><span class="stat-pill pill-got">${gotC}✓</span><span class="stat-pill pill-missing">${total-gotC} faltan</span>${getRepCountry(country)>0?`<span class="stat-pill pill-rep">🔁${getRepCountry(country)}</span>`:''}<div class="mini-progress"><div class="mini-progress-fill" style="width:${pct}%"></div></div><span style="font-size:11px;color:var(--muted)">${pct}%</span><span class="chevron">▼</span></div></div><div class="stickers-grid"></div>`;
     container.appendChild(section);
-
-    const grid = section.querySelector('.stickers-grid');
-    for (const code of filteredStickers) {
-      const got = isGot(code);
-      const rep = getRep(code);
-      const card = document.createElement('div');
-      card.className = 'sticker' + (got ? ' got' : '');
-      card.dataset.code = code;
-      const shortCode = code.split(' ').slice(-1)[0];
-      card.innerHTML = `
-        <div class="sticker-code">${shortCode}</div>
-        ${rep > 0 ? `<div class="rep-btn">${rep}</div>` : ''}
-      `;
-      card.addEventListener('click', () => { toggleGot(code); });
-      card.addEventListener('contextmenu', (e) => { e.preventDefault(); showCtxMenu(e, code); });
+    const grid=section.querySelector('.stickers-grid');
+    for(const code of fs){
+      const got=isGot(code),rep=getRep(code);
+      const card=document.createElement('div');
+      card.className='sticker'+(got?' got':'');
+      const shortCode=code.split(' ').slice(-1)[0];
+      card.innerHTML=`<div class="sticker-code">${shortCode}</div>${rep>0?`<div class="rep-btn">${rep}</div>`:''}`;
+      card.addEventListener('click',()=>toggleGot(code));
+      card.addEventListener('contextmenu',e=>{e.preventDefault();showCtxMenu(e,code);});
       grid.appendChild(card);
     }
   }
 }
 
-function getRep_country(country) {
-  const stickers = RAW[country] || [];
-  return stickers.reduce((sum, code) => sum + getRep(code), 0);
-}
+function toggleCollapse(country,section){collapsedSections[country]=!collapsedSections[country];section.classList.toggle('collapsed');}
 
-function toggleCollapse(country, section) {
-  collapsedSections[country] = !collapsedSections[country];
-  section.classList.toggle('collapsed');
-}
-
-// ========================
-// CONTEXT MENU
-// ========================
-function showCtxMenu(e, code) {
-  contextTarget = code;
-  const menu = document.getElementById('ctx-menu');
-  const got = isGot(code);
-  const rep = getRep(code);
-  document.getElementById('ctx-toggle-text').textContent = got ? 'Quitar conseguida' : 'Marcar conseguida';
-  document.getElementById('ctx-toggle').querySelector('span').textContent = got ? '✗' : '✓';
-  document.getElementById('ctx-remove-rep').style.display = rep > 0 ? 'flex' : 'none';
-  
-  menu.style.left = Math.min(e.clientX, window.innerWidth - 180) + 'px';
-  menu.style.top = Math.min(e.clientY, window.innerHeight - 120) + 'px';
+function showCtxMenu(e,code){
+  contextTarget=code;
+  const menu=document.getElementById('ctx-menu');
+  const got=isGot(code),rep=getRep(code);
+  document.getElementById('ctx-toggle-text').textContent=got?'Quitar conseguida':'Marcar conseguida';
+  document.getElementById('ctx-toggle').querySelector('span').textContent=got?'✗':'✓';
+  document.getElementById('ctx-remove-rep').style.display=rep>0?'flex':'none';
+  menu.style.left=Math.min(e.clientX,window.innerWidth-180)+'px';
+  menu.style.top=Math.min(e.clientY,window.innerHeight-120)+'px';
   menu.classList.add('show');
 }
-
-document.getElementById('ctx-toggle').onclick = () => {
-  if (contextTarget) { toggleGot(contextTarget); hideCtxMenu(); }
+document.getElementById('ctx-toggle').onclick=()=>{if(contextTarget){toggleGot(contextTarget);hideCtxMenu();}};
+document.getElementById('ctx-add-rep').onclick=()=>{if(contextTarget){addRep(contextTarget);hideCtxMenu();}};
+document.getElementById('ctx-remove-rep').onclick=()=>{
+  if(contextTarget){const cur=getRep(contextTarget);if(cur>1)state.repeated[contextTarget]--;else delete state.repeated[contextTarget];saveState();renderRepetidas();renderAlbum();updateHeader();updateTabBadges();hideCtxMenu();}
 };
-document.getElementById('ctx-add-rep').onclick = () => {
-  if (contextTarget) { addRep(contextTarget); hideCtxMenu(); }
-};
-document.getElementById('ctx-remove-rep').onclick = () => {
-  if (contextTarget) { removeRep(contextTarget); hideCtxMenu(); }
-};
+function hideCtxMenu(){document.getElementById('ctx-menu').classList.remove('show');contextTarget=null;}
+document.addEventListener('click',hideCtxMenu);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideCtxMenu();});
 
-function hideCtxMenu() {
-  document.getElementById('ctx-menu').classList.remove('show');
-  contextTarget = null;
-}
-document.addEventListener('click', hideCtxMenu);
-document.addEventListener('keydown', e => { if (e.key === 'Escape') hideCtxMenu(); });
-
-// ========================
-// REPETIDAS
-// ========================
-function renderRepetidas() {
-  const container = document.getElementById('rep-container');
-  container.innerHTML = '';
-
-  let hasAny = false;
-  for (const [country, stickers] of Object.entries(RAW)) {
-    const repStickers = stickers.filter(c => getRep(c) > 0);
-    if (repStickers.length === 0) continue;
-    hasAny = true;
-
-    const block = document.createElement('div');
-    block.className = 'rep-country-block';
-    block.innerHTML = `
-      <div class="rep-country-title">${country}</div>
-      <div class="rep-stickers" id="rep-stickers-${country.replace(/[^a-z0-9]/gi,'_')}"></div>
-    `;
+function renderRepetidas(){
+  const container=document.getElementById('rep-container');container.innerHTML='';
+  let hasAny=false;
+  for(const[country,stickers]of Object.entries(RAW)){
+    const rs=stickers.filter(c=>getRep(c)>0);if(!rs.length)continue;hasAny=true;
+    const block=document.createElement('div');block.className='rep-country-block';
+    block.innerHTML=`<div class="rep-country-title">${country}</div><div class="rep-stickers"></div>`;
     container.appendChild(block);
-
-    const wrap = block.querySelector('.rep-stickers');
-    for (const code of repStickers) {
-      const tag = document.createElement('div');
-      tag.className = 'rep-tag';
-      tag.innerHTML = `
-        <span>${code}</span>
-        <div class="rep-count-ctrl">
-          <button class="rep-btn-ctrl rep-minus" onclick="changeRep('${code}',-1)">−</button>
-          <span class="rep-count">${getRep(code)}</span>
-          <button class="rep-btn-ctrl rep-plus" onclick="changeRep('${code}',1)">+</button>
-        </div>
-      `;
-      wrap.appendChild(tag);
-    }
+    const wrap=block.querySelector('.rep-stickers');
+    for(const code of rs){const tag=document.createElement('div');tag.className='rep-tag';tag.innerHTML=`<span>${code}</span><div class="rep-count-ctrl"><button class="rep-btn-ctrl rep-minus" onclick="changeRep('${code}',-1)">−</button><span class="rep-count">${getRep(code)}</span><button class="rep-btn-ctrl rep-plus" onclick="changeRep('${code}',1)">+</button></div>`;wrap.appendChild(tag);}
   }
-
-  if (!hasAny) {
-    container.innerHTML = `
-      <div class="empty-state">
-        <span class="emoji">🔁</span>
-        <p>No tenés repetidas todavía.<br>Clic derecho en una figura para agregar una repetida.</p>
-      </div>`;
-  }
+  if(!hasAny)container.innerHTML=`<div class="empty-state"><span class="emoji">🔁</span><p>No tenés repetidas todavía.<br>Clic derecho en una figura para agregar una repetida.</p></div>`;
 }
+function changeRep(code,delta){const nv=(state.repeated[code]||0)+delta;if(nv<=0)delete state.repeated[code];else state.repeated[code]=nv;saveState();renderRepetidas();renderAlbum();updateHeader();updateTabBadges();}
 
-function changeRep(code, delta) {
-  const cur = getRep(code);
-  const newVal = cur + delta;
-  if (newVal <= 0) {
-    delete state.repeated[code];
-  } else {
-    state.repeated[code] = newVal;
-  }
-  saveState();
-  renderRepetidas();
-  renderAlbum();
-  updateHeader();
-  updateTabBadges();
-}
-
-// ========================
-// PROGRESO
-// ========================
-function setSortProg(s) {
-  currentSortProg = s;
-  document.querySelectorAll('.sort-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('sort-' + s).classList.add('active');
-  renderProgreso();
-}
-
-function renderProgreso() {
-  const container = document.getElementById('prog-container');
-  container.innerHTML = '';
-
-  let entries = Object.entries(RAW).map(([country, stickers]) => {
-    const got = stickers.filter(c => isGot(c)).length;
-    const total = stickers.length;
-    const pct = total > 0 ? got / total : 0;
-    return { country, got, total, pct, missing: total - got };
-  });
-
-  if (currentSortProg === 'alpha') entries.sort((a,b) => a.country.localeCompare(b.country));
-  else if (currentSortProg === 'pct-asc') entries.sort((a,b) => a.pct - b.pct);
-  else if (currentSortProg === 'pct-desc') entries.sort((a,b) => b.pct - a.pct);
-  else if (currentSortProg === 'missing') entries.sort((a,b) => b.missing - a.missing);
-
-  const completeCount = entries.filter(e => e.missing === 0).length;
-
-  document.getElementById('sum-got').textContent = gotCount();
-  document.getElementById('sum-missing').textContent = totalStickers() - gotCount();
-  document.getElementById('sum-rep').textContent = repCount();
-  document.getElementById('sum-complete').textContent = completeCount;
-
-  for (const { country, got, total, pct, missing } of entries) {
-    const pctRound = Math.round(pct * 100);
-    const complete = missing === 0;
-    const card = document.createElement('div');
-    card.className = 'prog-card' + (complete ? ' complete' : '');
-    card.innerHTML = `
-      <div class="prog-card-header">
-        <div class="prog-country">${complete ? '🏆 ' : ''}${country}</div>
-        <div class="prog-pct">${pctRound}%</div>
-      </div>
-      <div class="prog-bar-wrap"><div class="prog-bar-inner" style="width:${pctRound}%"></div></div>
-      <div class="prog-sub">
-        <span>✓ ${got} conseguidas</span>
-        <span>✗ ${missing} faltantes</span>
-      </div>
-    `;
-    card.onclick = () => {
-      document.querySelectorAll('.tab')[0].click();
-      showView('album');
-      document.getElementById('search-input').value = country;
-      renderAlbum();
-    };
+function setSortProg(s){currentSortProg=s;document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));document.getElementById('sort-'+s).classList.add('active');renderProgreso();}
+function renderProgreso(){
+  const container=document.getElementById('prog-container');container.innerHTML='';
+  let entries=Object.entries(RAW).map(([country,stickers])=>{const got=stickers.filter(c=>isGot(c)).length,total=stickers.length;return{country,got,total,pct:got/total,missing:total-got};});
+  if(currentSortProg==='alpha')entries.sort((a,b)=>a.country.localeCompare(b.country));
+  else if(currentSortProg==='pct-asc')entries.sort((a,b)=>a.pct-b.pct);
+  else if(currentSortProg==='pct-desc')entries.sort((a,b)=>b.pct-a.pct);
+  else if(currentSortProg==='missing')entries.sort((a,b)=>b.missing-a.missing);
+  const completeCount=entries.filter(e=>e.missing===0).length;
+  document.getElementById('sum-got').textContent=gotCount();
+  document.getElementById('sum-missing').textContent=totalStickers()-gotCount();
+  document.getElementById('sum-rep').textContent=repCount();
+  document.getElementById('sum-complete').textContent=completeCount;
+  for(const{country,got,total,pct,missing}of entries){
+    const pr=Math.round(pct*100),complete=missing===0;
+    const card=document.createElement('div');card.className='prog-card'+(complete?' complete':'');
+    card.innerHTML=`<div class="prog-card-header"><div class="prog-country">${complete?'🏆 ':''}${country}</div><div class="prog-pct">${pr}%</div></div><div class="prog-bar-wrap"><div class="prog-bar-inner" style="width:${pr}%"></div></div><div class="prog-sub"><span>✓ ${got} conseguidas</span><span>✗ ${missing} faltantes</span></div>`;
+    card.onclick=()=>{showView('album',document.querySelectorAll('.tab')[0]);document.getElementById('search-input').value=country;renderAlbum();};
     container.appendChild(card);
   }
 }
+function updateHeader(){const got=gotCount(),total=totalStickers(),pct=Math.round(got/total*100);document.getElementById('hdr-got').textContent=got;document.getElementById('hdr-total').textContent=total;document.getElementById('global-bar').style.width=pct+'%';document.getElementById('global-pct').textContent=pct+'%';}
+function updateTabBadges(){document.getElementById('tab-missing-badge').textContent=totalStickers()-gotCount();document.getElementById('tab-rep-badge').textContent=Object.keys(state.repeated).length;}
+function refreshAll(){renderAlbum();updateHeader();updateTabBadges();if(document.getElementById('view-progreso').classList.contains('active'))renderProgreso();if(document.getElementById('view-repetidas').classList.contains('active'))renderRepetidas();}
+updateHeader();updateTabBadges();renderAlbum();
 
 // ========================
-// HEADER & BADGES
+// SHARE FUNCTIONS
 // ========================
-function updateHeader() {
-  const got = gotCount();
-  const total = totalStickers();
-  const pct = Math.round(got / total * 100);
-  document.getElementById('hdr-got').textContent = got;
-  document.getElementById('hdr-total').textContent = total;
-  document.getElementById('global-bar').style.width = pct + '%';
-  document.getElementById('global-pct').textContent = pct + '%';
+function buildMissingText(){
+  const lines=['⚽ *FWC 2026 - Mis faltantes*',''];
+  let total=0;
+  for(const[country,stickers]of Object.entries(RAW)){
+    const missing=stickers.filter(c=>!isGot(c));
+    if(missing.length===0)continue;
+    total+=missing.length;
+    // just show the numbers
+    const nums=missing.map(c=>c.split(' ').pop()).join(', ');
+    lines.push('*'+country+'* ('+missing.length+'): '+nums);
+  }
+  lines.push('');
+  lines.push('_Total: '+total+' figus faltantes_');
+  return lines.join('
+');
 }
 
-function updateTabBadges() {
-  const missing = totalStickers() - gotCount();
-  document.getElementById('tab-missing-badge').textContent = missing;
-  document.getElementById('tab-rep-badge').textContent = Object.keys(state.repeated).length;
+function shareWhatsapp(){
+  const text=buildMissingText();
+  const url='https://wa.me/?text='+encodeURIComponent(text);
+  window.open(url,'_blank');
 }
 
-function refreshAll() {
-  renderAlbum();
-  updateHeader();
-  updateTabBadges();
-  // update progress if visible
-  if (document.getElementById('view-progreso').classList.contains('active')) renderProgreso();
-  if (document.getElementById('view-repetidas').classList.contains('active')) renderRepetidas();
+function copyText(){
+  const text=buildMissingText();
+  navigator.clipboard.writeText(text).then(()=>showToast('✅ Copiado al portapapeles')).catch(()=>{
+    // fallback
+    const ta=document.createElement('textarea');
+    ta.value=text;document.body.appendChild(ta);ta.select();
+    document.execCommand('copy');document.body.removeChild(ta);
+    showToast('✅ Copiado al portapapeles');
+  });
 }
 
-// ========================
-// INIT
-// ========================
-updateHeader();
-updateTabBadges();
-renderAlbum();
+function sharePDF(){
+  const {jsPDF}=window.jspdf;
+  if(!jsPDF){showToast('⏳ Cargando PDF...');return;}
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+  const pageW=210,margin=12,colW=(pageW-margin*2-4)/2;
+  let x=margin,y=20;
+
+  // Title
+  doc.setFillColor(22,33,62);
+  doc.rect(0,0,210,16,'F');
+  doc.setTextColor(245,158,11);
+  doc.setFontSize(14);
+  doc.setFont('helvetica','bold');
+  doc.text('FWC 2026 - Figus Faltantes',pageW/2,10,{align:'center'});
+
+  const missing=[];
+  let totalMissing=0;
+  for(const[country,stickers]of Object.entries(RAW)){
+    const ms=stickers.filter(c=>!isGot(c));
+    if(ms.length>0){missing.push({country,codes:ms});totalMissing+=ms.length;}
+  }
+
+  doc.setTextColor(100,116,139);
+  doc.setFontSize(8);
+  doc.setFont('helvetica','normal');
+  doc.text('Total: '+totalMissing+' figus faltantes  |  Generado '+new Date().toLocaleDateString('es-AR'),pageW/2,15,{align:'center'});
+
+  y=22;
+  let col=0;
+
+  for(const{country,codes}of missing){
+    // estimate height needed
+    const numRows=Math.ceil(codes.length/10);
+    const blockH=6+numRows*4+3;
+
+    if(y+blockH>285){
+      if(col===0){col=1;x=margin+colW+4;y=22;}
+      else{doc.addPage();col=0;x=margin;y=22;}
+    }
+
+    // Header
+    doc.setFillColor(22,33,62);
+    doc.roundedRect(x,y,colW,5.5,1,1,'F');
+    doc.setTextColor(245,158,11);
+    doc.setFontSize(7);
+    doc.setFont('helvetica','bold');
+    doc.text(country+' ('+codes.length+')',x+2,y+3.8);
+    y+=6;
+
+    // Numbers grid
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(6.5);
+    const nums=codes.map(c=>c.split(' ').pop());
+    let row=[];
+    for(let i=0;i<nums.length;i++){
+      row.push(nums[i]);
+      if(row.length===10||i===nums.length-1){
+        const rowStr=row.join('  ');
+        // alternating bg
+        const rowIdx=Math.floor(i/10);
+        if(rowIdx%2===0){doc.setFillColor(240,244,255);doc.rect(x,y-0.5,colW,4,'F');}
+        doc.setTextColor(30,45,80);
+        doc.text(rowStr,x+2,y+2.5);
+        y+=4;row=[];
+      }
+    }
+    y+=2;
+
+    // Switch column after halfway
+    if(col===0&&missing.indexOf(missing.find(m=>m.country===country))===Math.floor(missing.length/2)-1){
+      col=1;x=margin+colW+4;y=22;
+    }
+  }
+
+  doc.save('figus_faltantes_'+new Date().toISOString().slice(0,10)+'.pdf');
+  showToast('📄 PDF descargado');
+}
+
+function showToast(msg){
+  let t=document.getElementById('toast');
+  if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t);}
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2500);
+}
 </script>
 </body>
 </html>
