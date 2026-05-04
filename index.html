@@ -403,7 +403,16 @@ function showCtxMenu(e,code){
 document.getElementById('ctx-add-rep').onclick=()=>{if(contextTarget){addRep(contextTarget);hideCtxMenu();}};
 document.getElementById('ctx-remove-rep').onclick=()=>{if(contextTarget){const c=getRep(contextTarget);if(c>1)state.repeated[contextTarget]--;else delete state.repeated[contextTarget];saveState();renderRepetidas();renderAlbum();updateHeader();updateTabBadges();hideCtxMenu();}};
 function hideCtxMenu(){document.getElementById('ctx-menu').classList.remove('show');contextTarget=null;}
-document.addEventListener('click',hideCtxMenu);
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('ctx-menu');
+  if(menu.contains(e.target))return; // click inside menu, don't close
+  hideCtxMenu();
+});
+document.addEventListener('touchstart',e=>{
+  const menu=document.getElementById('ctx-menu');
+  if(!menu.classList.contains('show'))return;
+  if(!menu.contains(e.target))hideCtxMenu();
+},{passive:true});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hideCtxMenu();});
 
 // ===== REPETIDAS =====
