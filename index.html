@@ -177,20 +177,9 @@ header{background:linear-gradient(135deg,#0f1929,#1a2235);border-bottom:2px soli
 .map-tooltip{position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;pointer-events:none;z-index:500;display:none;}
 @media(max-width:500px){.stickers-grid{grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:4px;}.logo{font-size:21px;}.mini-progress{display:none;}.share-btn{font-size:11px;padding:7px 10px;}}
 </style>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import{getFirestore,doc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-const cfg={apiKey:"AIzaSyCXNc9b4tlkctn4QaU-4v9aF9mH2ENOiqw",authDomain:"figus-fwc2026.firebaseapp.com",projectId:"figus-fwc2026",storageBucket:"figus-fwc2026.firebasestorage.app",messagingSenderId:"703428765017",appId:"1:703428765017:web:5f3b0de7f2c4f1df455848"};
-const app=initializeApp(cfg);
-const db=getFirestore(app);
-const REF=doc(db,"albums","martin");
-function setSS(s){const el=document.getElementById('sync-status');if(!el)return;if(s==='syncing'){el.textContent='⏳ Guardando...';el.style.color='var(--accent)';}else if(s==='ok'){el.textContent='☁️ Sincronizado';el.style.color='var(--accent2)';}else{el.textContent='📴 Sin conexión';el.style.color='var(--danger)';}}
-let st=null;
-window.saveToFirestore=function(){setSS('syncing');clearTimeout(st);st=setTimeout(async()=>{try{await setDoc(REF,{got:state.got,repeated:state.repeated,updatedAt:Date.now()});setSS('ok');localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){console.error('Firestore save error:',e);setSS('offline');}},800);};
-let first=true;
-onSnapshot(REF,(snap)=>{if(snap.exists()){const d=snap.data();state.got=d.got||{};state.repeated=d.repeated||{};localStorage.setItem(STORAGE_KEY,JSON.stringify(state));refreshAll();setSS('ok');if(first){showToast('☁️ Sincronizado');first=false;}}else{first=false;window.saveToFirestore();}},err=>{console.error(err);setSS('offline');first=false;});
-setSS('syncing');
-</script>
+<!-- Firebase compat SDK (no modules, works with regular scripts) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 <div class="container">
@@ -199,7 +188,7 @@ setSS('syncing');
     <div class="logo">⚽ Figus <span>FWC 2026</span></div>
     <div class="hdr-right">
       <div class="progress-text"><strong id="hdr-got">0</strong> / <span id="hdr-total">0</span> conseguidas</div>
-      <div id="sync-status">⏳ Conectando...</div>
+      <div id="sync-status" style="font-size:11px;color:var(--muted)">⏳ Conectando...</div>
     </div>
   </div>
   <div class="global-progress">
@@ -752,6 +741,64 @@ function drawMapSVG(geo,con){
 function showToast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t);}t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2500);}
 
 updateHeader();updateTabBadges();renderAlbum();
+</script>
+<script>
+// Firebase init — runs after state and all functions are defined
+(function(){
+  function setSS(s){
+    const el=document.getElementById('sync-status');
+    if(!el)return;
+    if(s==='syncing'){el.textContent='⏳ Guardando...';el.style.color='var(--accent)';}
+    else if(s==='ok'){el.textContent='☁️ Sincronizado';el.style.color='var(--accent2)';}
+    else{el.textContent='📴 Sin conexión';el.style.color='var(--danger)';}
+  }
+
+  const cfg={
+    apiKey:"AIzaSyCXNc9b4tlkctn4QaU-4v9aF9mH2ENOiqw",
+    authDomain:"figus-fwc2026.firebaseapp.com",
+    projectId:"figus-fwc2026",
+    storageBucket:"figus-fwc2026.firebasestorage.app",
+    messagingSenderId:"703428765017",
+    appId:"1:703428765017:web:5f3b0de7f2c4f1df455848"
+  };
+
+  firebase.initializeApp(cfg);
+  const db=firebase.firestore();
+  const REF=db.collection('albums').doc('martin');
+
+  let saveTimer=null;
+  window.saveToFirestore=function(){
+    setSS('syncing');
+    clearTimeout(saveTimer);
+    saveTimer=setTimeout(()=>{
+      REF.set({got:state.got,repeated:state.repeated,updatedAt:Date.now()})
+        .then(()=>{setSS('ok');localStorage.setItem(STORAGE_KEY,JSON.stringify(state));})
+        .catch(e=>{console.error('Firestore error:',e);setSS('offline');});
+    },800);
+  };
+
+  let first=true;
+  REF.onSnapshot(snap=>{
+    if(snap.exists()){
+      const d=snap.data();
+      state.got=d.got||{};
+      state.repeated=d.repeated||{};
+      localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+      refreshAll();
+      setSS('ok');
+      if(first){showToast('☁️ Sincronizado');first=false;}
+    } else {
+      first=false;
+      window.saveToFirestore();
+    }
+  }, err=>{
+    console.error('Firestore listen error:',err);
+    setSS('offline');
+    first=false;
+  });
+
+  setSS('syncing');
+})();
 </script>
 </body>
 </html>
