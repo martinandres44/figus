@@ -5,198 +5,191 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>⚽ Figus FWC 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--accent:#f59e0b;--accent2:#10b981;--accent3:#3b82f6;--danger:#ef4444;--text:#f1f5f9;--muted:#64748b;--border:#1e2d45;--got:#10b981;--missing:#334155;}
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
-  body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 20%,rgba(245,158,11,0.06) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(59,130,246,0.06) 0%,transparent 50%),repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,255,255,0.01) 40px,rgba(255,255,255,0.01) 41px);pointer-events:none;z-index:0;}
-  .container{position:relative;z-index:1;}
-  header{background:linear-gradient(135deg,#0f1929 0%,#1a2235 100%);border-bottom:2px solid var(--accent);padding:16px 20px;position:sticky;top:0;z-index:100;box-shadow:0 4px 30px rgba(0,0,0,0.5);}
-  .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-  .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--accent);text-shadow:0 0 20px rgba(245,158,11,0.4);}
-  .logo span{color:var(--text);}
-  .global-progress{margin-top:12px;display:flex;align-items:center;gap:12px;}
-  .progress-bar-wrap{flex:1;height:8px;background:var(--border);border-radius:99px;overflow:hidden;}
-  .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width 0.4s ease;}
-  .progress-text{font-size:12px;color:var(--muted);white-space:nowrap;}
-  .progress-text strong{color:var(--accent2);}
-  .tabs{display:flex;gap:4px;padding:12px 20px 0;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;scrollbar-width:none;}
-  .tabs::-webkit-scrollbar{display:none;}
-  .tab{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:1px;padding:8px 16px;border-radius:8px 8px 0 0;cursor:pointer;border:none;background:transparent;color:var(--muted);white-space:nowrap;transition:all 0.2s;}
-  .tab:hover{color:var(--text);background:var(--surface2);}
-  .tab.active{color:var(--accent);background:var(--bg);border-top:2px solid var(--accent);}
-  .tab .badge{display:inline-block;background:var(--accent);color:#000;font-size:9px;font-family:'DM Sans',sans-serif;font-weight:700;padding:1px 5px;border-radius:99px;margin-left:4px;vertical-align:middle;}
-  .view{display:none;padding:16px 20px;}
-  .view.active{display:block;}
-  .controls{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
-  .search-box{flex:1;min-width:200px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;}
-  .search-box:focus{border-color:var(--accent);}
-  .search-box::placeholder{color:var(--muted);}
-  .filter-btn{padding:10px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
-  .filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,158,11,0.08);}
-  .country-section{margin-bottom:20px;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);animation:fadeIn 0.3s ease;}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-  .country-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface2);cursor:pointer;user-select:none;gap:10px;}
-  .country-header:hover{background:#1e2d45;}
-  .country-name{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--text);}
-  .country-stats{display:flex;align-items:center;gap:10px;font-size:12px;}
-  .stat-pill{padding:2px 8px;border-radius:99px;font-weight:600;font-size:11px;}
-  .pill-got{background:rgba(16,185,129,0.2);color:var(--got);}
-  .pill-missing{background:rgba(51,65,85,0.5);color:#94a3b8;}
-  .pill-rep{background:rgba(245,158,11,0.2);color:var(--accent);}
-  .mini-progress{width:80px;height:4px;background:var(--border);border-radius:99px;overflow:hidden;}
-  .mini-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width 0.3s ease;}
-  .chevron{color:var(--muted);font-size:12px;transition:transform 0.2s;}
-  .country-section.collapsed .chevron{transform:rotate(-90deg);}
-  .stickers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:6px;padding:12px 16px;}
-  .country-section.collapsed .stickers-grid{display:none;}
-  .sticker{position:relative;aspect-ratio:3/4;border-radius:8px;border:2px solid var(--missing);background:var(--surface2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;user-select:none;overflow:hidden;touch-action:manipulation;-webkit-touch-callout:none;-webkit-user-select:none;}
-  .sticker:hover{transform:scale(1.05);border-color:var(--muted);}
-  .sticker.got{border-color:var(--got);background:rgba(16,185,129,0.12);}
-  .sticker.got::after{content:'✓';position:absolute;top:2px;right:4px;font-size:9px;color:var(--got);font-weight:700;}
-  .sticker-code{font-size:10px;font-weight:600;color:var(--muted);text-align:center;line-height:1.2;}
-  .sticker.got .sticker-code{color:var(--got);}
-  .rep-btn{position:absolute;bottom:2px;right:2px;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#000;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center;z-index:2;}
-  .ctx-menu{position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:6px;box-shadow:0 8px 32px rgba(0,0,0,0.5);z-index:1000;min-width:160px;display:none;}
-  .ctx-menu.show{display:block;}
-  .ctx-item{padding:8px 12px;border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:8px;transition:background 0.1s;}
-  .ctx-item:hover{background:var(--border);}
-  .ctx-item.danger{color:var(--danger);}
-  .ctx-item.success{color:var(--got);}
-  .ctx-item.warn{color:var(--accent);}
-  .rep-country-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:12px;}
-  .rep-country-title{font-family:'Bebas Neue',sans-serif;font-size:16px;padding:10px 14px;background:var(--surface2);border-bottom:1px solid var(--border);letter-spacing:1px;}
-  .rep-stickers{display:flex;flex-wrap:wrap;gap:8px;padding:12px 14px;}
-  .rep-tag{display:flex;align-items:center;gap:6px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:4px 10px;font-size:12px;font-weight:600;color:var(--accent);}
-  .rep-count-ctrl{display:flex;align-items:center;gap:4px;}
-  .rep-btn-ctrl{width:18px;height:18px;border-radius:50%;border:none;cursor:pointer;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all 0.1s;}
-  .rep-minus{background:rgba(239,68,68,0.2);color:var(--danger);}
-  .rep-plus{background:rgba(16,185,129,0.2);color:var(--got);}
-  .rep-minus:hover{background:var(--danger);color:white;}
-  .rep-plus:hover{background:var(--got);color:white;}
-  .rep-count{font-size:13px;color:var(--text);min-width:14px;text-align:center;}
-  .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
-  .empty-state .emoji{font-size:48px;display:block;margin-bottom:12px;}
-  .progress-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;}
-  .prog-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;transition:border-color 0.2s;cursor:pointer;}
-  .prog-card:hover{border-color:var(--accent);}
-  .prog-card.complete{border-color:var(--got);background:rgba(16,185,129,0.05);}
-  .prog-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-  .prog-country{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;}
-  .prog-pct{font-size:13px;font-weight:700;color:var(--accent2);}
-  .prog-card.complete .prog-pct{color:var(--got);}
-  .prog-bar-wrap{height:6px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:6px;}
-  .prog-bar-inner{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width 0.4s ease;}
-  .prog-card.complete .prog-bar-inner{background:var(--got);}
-  .prog-sub{font-size:11px;color:var(--muted);display:flex;gap:10px;}
-  .sort-bar{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center;}
-  .sort-label{font-size:12px;color:var(--muted);}
-  .sort-btn{padding:4px 12px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:12px;cursor:pointer;transition:all 0.15s;}
-  .sort-btn.active,.sort-btn:hover{border-color:var(--accent2);color:var(--accent2);}
-  .summary-bar{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px;}
-  .sum-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:10px 16px;text-align:center;flex:1;min-width:100px;}
-  .sum-val{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:1px;}
-  .sum-lbl{font-size:11px;color:var(--muted);}
-  .sum-green{color:var(--got);}.sum-yellow{color:var(--accent);}.sum-blue{color:var(--accent3);}.sum-red{color:var(--danger);}
-  ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
-  @media(max-width:500px){.stickers-grid{grid-template-columns:repeat(auto-fill,minmax(52px,1fr));gap:4px;}.logo{font-size:22px;}.mini-progress{display:none;}}
-  /* Share bar */
-  .share-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-  .share-btn{display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;transition:all 0.2s;}
-  .share-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(0,0,0,0.3);}
-  .share-btn.wa{background:#25D366;color:#fff;}
-  .share-btn.wa:hover{background:#20bd5a;}
-  .share-btn.pdf{background:var(--accent);color:#000;}
-  .share-btn.pdf:hover{background:#e08e00;}
-  .share-btn.copy{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
-  .share-btn.copy:hover{border-color:var(--accent3);color:var(--accent3);}
-  /* Toast */
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:var(--text);padding:10px 20px;border-radius:10px;font-size:13px;opacity:0;transition:all 0.3s;z-index:9999;border:1px solid var(--border);pointer-events:none;}
-  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--bg:#0a0e1a;--surface:#111827;--surface2:#1a2235;--accent:#f59e0b;--accent2:#10b981;--accent3:#3b82f6;--danger:#ef4444;--text:#f1f5f9;--muted:#64748b;--border:#1e2d45;--got:#10b981;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 20%,rgba(245,158,11,0.06) 0%,transparent 50%),radial-gradient(circle at 80% 80%,rgba(59,130,246,0.06) 0%,transparent 50%);pointer-events:none;z-index:0;}
+.container{position:relative;z-index:1;}
+header{background:linear-gradient(135deg,#0f1929,#1a2235);border-bottom:2px solid var(--accent);padding:14px 20px;position:sticky;top:0;z-index:100;box-shadow:0 4px 30px rgba(0,0,0,0.5);}
+.header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--accent);text-shadow:0 0 20px rgba(245,158,11,0.4);}
+.logo span{color:var(--text);}
+.hdr-right{display:flex;flex-direction:column;align-items:flex-end;gap:2px;}
+.progress-text{font-size:12px;color:var(--muted);}
+.progress-text strong{color:var(--accent2);}
+#sync-status{font-size:11px;color:var(--muted);}
+.global-progress{margin-top:10px;display:flex;align-items:center;gap:10px;}
+.progress-bar-wrap{flex:1;height:7px;background:var(--border);border-radius:99px;overflow:hidden;}
+.progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width 0.4s ease;}
+.tabs{display:flex;gap:2px;padding:10px 20px 0;border-bottom:1px solid var(--border);background:var(--surface);overflow-x:auto;scrollbar-width:none;}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;padding:7px 14px;border-radius:8px 8px 0 0;cursor:pointer;border:none;background:transparent;color:var(--muted);white-space:nowrap;transition:all 0.2s;}
+.tab:hover{color:var(--text);background:var(--surface2);}
+.tab.active{color:var(--accent);background:var(--bg);border-top:2px solid var(--accent);}
+.tab .badge{display:inline-block;background:var(--accent);color:#000;font-size:9px;font-family:'DM Sans',sans-serif;font-weight:700;padding:1px 5px;border-radius:99px;margin-left:3px;vertical-align:middle;}
+.view{display:none;padding:14px 20px;}
+.view.active{display:block;}
+/* Album */
+.controls{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.search-box{flex:1;min-width:180px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 13px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;}
+.search-box:focus{border-color:var(--accent);}
+.search-box::placeholder{color:var(--muted);}
+.filter-btn{padding:9px 14px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.filter-btn:hover,.filter-btn.active{border-color:var(--accent);color:var(--accent);background:rgba(245,158,11,0.08);}
+.country-section{margin-bottom:16px;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border);}
+.country-header{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--surface2);cursor:pointer;user-select:none;gap:8px;}
+.country-header:hover{background:#1e2d45;}
+.country-name{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;}
+.country-stats{display:flex;align-items:center;gap:8px;font-size:11px;}
+.stat-pill{padding:2px 7px;border-radius:99px;font-weight:600;font-size:10px;}
+.pill-got{background:rgba(16,185,129,0.2);color:var(--got);}
+.pill-missing{background:rgba(51,65,85,0.5);color:#94a3b8;}
+.pill-rep{background:rgba(245,158,11,0.2);color:var(--accent);}
+.mini-progress{width:60px;height:3px;background:var(--border);border-radius:99px;overflow:hidden;}
+.mini-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width 0.3s;}
+.chevron{color:var(--muted);font-size:11px;transition:transform 0.2s;}
+.country-section.collapsed .chevron{transform:rotate(-90deg);}
+.stickers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(58px,1fr));gap:5px;padding:10px 14px;}
+.country-section.collapsed .stickers-grid{display:none;}
+.sticker{position:relative;aspect-ratio:3/4;border-radius:8px;border:2px solid #334155;background:var(--surface2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;user-select:none;overflow:hidden;touch-action:manipulation;-webkit-touch-callout:none;-webkit-user-select:none;}
+.sticker:hover{transform:scale(1.05);border-color:var(--muted);}
+.sticker.got{border-color:var(--got);background:rgba(16,185,129,0.12);}
+.sticker.got::after{content:'✓';position:absolute;top:2px;right:3px;font-size:9px;color:var(--got);font-weight:700;}
+.sticker-code{font-size:10px;font-weight:600;color:var(--muted);text-align:center;}
+.sticker.got .sticker-code{color:var(--got);}
+.rep-dot{position:absolute;bottom:2px;right:2px;width:14px;height:14px;border-radius:50%;background:var(--accent);color:#000;font-size:8px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+/* Share bar */
+.share-bar{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
+.share-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:10px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;transition:all 0.2s;white-space:nowrap;}
+.share-btn:hover{transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,0.3);}
+.btn-wa{background:#25D366;color:#fff;}.btn-wa:hover{background:#20bd5a;}
+.btn-pdf{background:var(--accent);color:#000;}
+.btn-pdf2{background:#d97706;color:#fff;}
+.btn-copy{background:var(--surface2);color:var(--text);border:1px solid var(--border);}
+.btn-qr{background:#6366f1;color:#fff;}
+.btn-swap{background:#ec4899;color:#fff;}
+.btn-ofrezco{background:#0ea5e9;color:#fff;}
+/* Ctx menu */
+.ctx-menu{position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:5px;box-shadow:0 8px 32px rgba(0,0,0,0.5);z-index:1000;min-width:150px;display:none;}
+.ctx-menu.show{display:block;}
+.ctx-item{padding:8px 11px;border-radius:6px;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:7px;transition:background 0.1s;}
+.ctx-item:hover{background:var(--border);}
+.ctx-item.danger{color:var(--danger);}
+.ctx-item.warn{color:var(--accent);}
+/* Repetidas */
+.rep-country-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+.rep-country-title{font-family:'Bebas Neue',sans-serif;font-size:15px;padding:9px 13px;background:var(--surface2);border-bottom:1px solid var(--border);letter-spacing:1px;}
+.rep-stickers{display:flex;flex-wrap:wrap;gap:7px;padding:10px 13px;}
+.rep-tag{display:flex;align-items:center;gap:5px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.3);border-radius:8px;padding:3px 9px;font-size:12px;font-weight:600;color:var(--accent);}
+.rep-count-ctrl{display:flex;align-items:center;gap:3px;}
+.rep-btn-ctrl{width:17px;height:17px;border-radius:50%;border:none;cursor:pointer;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all 0.1s;}
+.rep-minus{background:rgba(239,68,68,0.2);color:var(--danger);}
+.rep-plus{background:rgba(16,185,129,0.2);color:var(--got);}
+.rep-minus:hover{background:var(--danger);color:white;}
+.rep-plus:hover{background:var(--got);color:white;}
+.rep-count{font-size:12px;color:var(--text);min-width:13px;text-align:center;}
+/* Progress */
+.progress-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:9px;}
+.prog-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px;transition:border-color 0.2s;cursor:pointer;}
+.prog-card:hover{border-color:var(--accent);}
+.prog-card.complete{border-color:var(--got);background:rgba(16,185,129,0.05);}
+.prog-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px;}
+.prog-country{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;}
+.prog-pct{font-size:12px;font-weight:700;color:var(--accent2);}
+.prog-card.complete .prog-pct{color:var(--got);}
+.prog-bar-wrap{height:5px;background:var(--border);border-radius:99px;overflow:hidden;margin-bottom:5px;}
+.prog-bar-inner{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width 0.4s;}
+.prog-card.complete .prog-bar-inner{background:var(--got);}
+.prog-sub{font-size:10px;color:var(--muted);display:flex;gap:8px;}
+.sort-bar{display:flex;gap:5px;margin-bottom:12px;flex-wrap:wrap;align-items:center;}
+.sort-label{font-size:11px;color:var(--muted);}
+.sort-btn{padding:3px 11px;border-radius:99px;border:1px solid var(--border);background:var(--surface);color:var(--muted);font-size:11px;cursor:pointer;transition:all 0.15s;}
+.sort-btn.active,.sort-btn:hover{border-color:var(--accent2);color:var(--accent2);}
+.summary-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.sum-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;text-align:center;flex:1;min-width:80px;}
+.sum-val{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:1px;}
+.sum-lbl{font-size:10px;color:var(--muted);}
+.sum-green{color:var(--got);}.sum-yellow{color:var(--accent);}.sum-blue{color:var(--accent3);}.sum-red{color:var(--danger);}
+/* Intercambio */
+.swap-box{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:14px;}
+.swap-box h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;margin-bottom:8px;color:var(--accent);}
+.swap-textarea{width:100%;height:140px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:12px;resize:vertical;outline:none;transition:border-color 0.2s;}
+.swap-textarea:focus{border-color:var(--accent);}
+.swap-textarea::placeholder{color:var(--muted);}
+.swap-results{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+@media(max-width:600px){.swap-results{grid-template-columns:1fr;}}
+.swap-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px;}
+.swap-panel h4{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:1px;margin-bottom:10px;}
+.swap-panel.give h4{color:var(--accent2);}
+.swap-panel.need h4{color:var(--accent3);}
+.swap-tag{display:inline-block;background:var(--surface2);border-radius:6px;padding:2px 8px;font-size:11px;font-weight:600;margin:2px;}
+.swap-tag.give-tag{border:1px solid rgba(16,185,129,0.4);color:var(--got);}
+.swap-tag.need-tag{border:1px solid rgba(59,130,246,0.4);color:var(--accent3);}
+.swap-empty{color:var(--muted);font-size:13px;}
+/* Ofrezco/Busco */
+.ob-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:600px){.ob-grid{grid-template-columns:1fr;}}
+.ob-panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px;}
+.ob-panel h3{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:1px;margin-bottom:10px;}
+.ob-panel.ofrezco h3{color:var(--accent2);}
+.ob-panel.busco h3{color:var(--accent3);}
+.ob-share-bar{display:flex;gap:7px;margin-bottom:10px;flex-wrap:wrap;}
+.ob-country{margin-bottom:8px;}
+.ob-country-name{font-size:11px;font-weight:700;color:var(--muted);margin-bottom:3px;text-transform:uppercase;letter-spacing:0.5px;}
+.ob-codes{display:flex;flex-wrap:wrap;gap:3px;}
+.ob-code{background:var(--surface2);border-radius:5px;padding:2px 7px;font-size:11px;font-weight:600;}
+.ofrezco .ob-code{border:1px solid rgba(16,185,129,0.3);color:var(--got);}
+.busco .ob-code{border:1px solid rgba(59,130,246,0.3);color:var(--accent3);}
+/* QR Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:2000;display:none;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;max-width:340px;width:90%;text-align:center;}
+.modal h3{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:1px;color:var(--accent);margin-bottom:8px;}
+.modal p{font-size:12px;color:var(--muted);margin-bottom:16px;}
+#qr-container{display:flex;justify-content:center;margin-bottom:16px;}
+#qr-container canvas,#qr-container img{border-radius:8px;}
+.modal-close{padding:8px 20px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;}
+/* Empty */
+.empty-state{text-align:center;padding:50px 20px;color:var(--muted);}
+.empty-state .emoji{font-size:44px;display:block;margin-bottom:10px;}
+/* Toast */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(20px);background:#1e293b;color:var(--text);padding:9px 18px;border-radius:10px;font-size:13px;opacity:0;transition:all 0.3s;z-index:9999;border:1px solid var(--border);pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+::-webkit-scrollbar{width:5px;}::-webkit-scrollbar-track{background:var(--bg);}::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+/* Stats */
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;}
+@media(max-width:650px){.charts-grid{grid-template-columns:1fr;}}
+.chart-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;}
+.chart-card h4{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:1px;color:var(--accent);margin-bottom:12px;}
+.chart-card.full{grid-column:1/-1;}
+/* Map */
+.map-wrap{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;overflow:hidden;}
+.map-wrap h3{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:1px;color:var(--accent);margin-bottom:10px;}
+.map-legend{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px;font-size:11px;color:var(--muted);}
+.legend-dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px;}
+#world-svg{width:100%;height:auto;border-radius:8px;}
+#world-svg .country-path{transition:opacity 0.2s;cursor:pointer;}
+#world-svg .country-path:hover{opacity:0.8;}
+.map-tooltip{position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;font-size:12px;pointer-events:none;z-index:500;display:none;}
+@media(max-width:500px){.stickers-grid{grid-template-columns:repeat(auto-fill,minmax(50px,1fr));gap:4px;}.logo{font-size:21px;}.mini-progress{display:none;}.share-btn{font-size:11px;padding:7px 10px;}}
+</style>
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCXNc9b4tlkctn4QaU-4v9aF9mH2ENOiqw",
-  authDomain: "figus-fwc2026.firebaseapp.com",
-  projectId: "figus-fwc2026",
-  storageBucket: "figus-fwc2026.firebasestorage.app",
-  messagingSenderId: "703428765017",
-  appId: "1:703428765017:web:5f3b0de7f2c4f1df455848"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const DOC_REF = doc(db, "albums", "martin");
-
-// Sync indicator
-function setSyncStatus(status) {
-  const el = document.getElementById('sync-status');
-  if (!el) return;
-  if (status === 'syncing') { el.textContent = '⏳ Guardando...'; el.style.color = 'var(--accent)'; }
-  else if (status === 'ok') { el.textContent = '☁️ Sincronizado'; el.style.color = 'var(--accent2)'; }
-  else if (status === 'offline') { el.textContent = '📴 Sin conexión'; el.style.color = 'var(--danger)'; }
-}
-
-// Save to Firestore (debounced)
-let saveTimer = null;
-window.saveToFirestore = function() {
-  setSyncStatus('syncing');
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(async () => {
-    try {
-      await setDoc(DOC_REF, {
-        got: state.got,
-        repeated: state.repeated,
-        updatedAt: Date.now()
-      });
-      setSyncStatus('ok');
-      // also update localStorage as cache
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    } catch(e) {
-      console.error('Firestore save error:', e);
-      setSyncStatus('offline');
-    }
-  }, 800);
-};
-
-// Listen for real-time changes from other devices
-let isFirstLoad = true;
-onSnapshot(DOC_REF, (snap) => {
-  if (snap.exists()) {
-    const data = snap.data();
-    // Merge: don't overwrite local changes mid-session on first load
-    if (isFirstLoad) {
-      state.got = data.got || {};
-      state.repeated = data.repeated || {};
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      refreshAll();
-      setSyncStatus('ok');
-      isFirstLoad = false;
-      showToast('☁️ Datos sincronizados desde la nube');
-    } else {
-      // Real-time update from another device
-      state.got = data.got || {};
-      state.repeated = data.repeated || {};
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-      refreshAll();
-      setSyncStatus('ok');
-    }
-  } else {
-    // First time ever: push local state to Firestore
-    isFirstLoad = false;
-    window.saveToFirestore();
-  }
-}, (err) => {
-  console.error('Firestore listen error:', err);
-  setSyncStatus('offline');
-  isFirstLoad = false;
-});
-
-setSyncStatus('syncing');
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getFirestore,doc,setDoc,onSnapshot}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const cfg={apiKey:"AIzaSyCXNc9b4tlkctn4QaU-4v9aF9mH2ENOiqw",authDomain:"figus-fwc2026.firebaseapp.com",projectId:"figus-fwc2026",storageBucket:"figus-fwc2026.firebasestorage.app",messagingSenderId:"703428765017",appId:"1:703428765017:web:5f3b0de7f2c4f1df455848"};
+const app=initializeApp(cfg);
+const db=getFirestore(app);
+const REF=doc(db,"albums","martin");
+function setSS(s){const el=document.getElementById('sync-status');if(!el)return;if(s==='syncing'){el.textContent='⏳ Guardando...';el.style.color='var(--accent)';}else if(s==='ok'){el.textContent='☁️ Sincronizado';el.style.color='var(--accent2)';}else{el.textContent='📴 Sin conexión';el.style.color='var(--danger)';}}
+let st=null;
+window.saveToFirestore=function(){setSS('syncing');clearTimeout(st);st=setTimeout(async()=>{try{await setDoc(REF,{got:state.got,repeated:state.repeated,updatedAt:Date.now()});setSS('ok');localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){console.error('Firestore save error:',e);setSS('offline');}},800);};
+let first=true;
+onSnapshot(REF,(snap)=>{if(snap.exists()){const d=snap.data();state.got=d.got||{};state.repeated=d.repeated||{};localStorage.setItem(STORAGE_KEY,JSON.stringify(state));refreshAll();setSS('ok');if(first){showToast('☁️ Sincronizado');first=false;}}else{first=false;window.saveToFirestore();}},err=>{console.error(err);setSS('offline');first=false;});
+setSS('syncing');
 </script>
 </head>
 <body>
@@ -204,27 +197,35 @@ setSyncStatus('syncing');
 <header>
   <div class="header-top">
     <div class="logo">⚽ Figus <span>FWC 2026</span></div>
-    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:3px">
-    <div class="progress-text"><strong id="hdr-got">0</strong> / <span id="hdr-total">0</span> conseguidas</div>
-    <div id="sync-status" style="font-size:11px;color:var(--muted);">⏳ Conectando...</div>
-  </div>
+    <div class="hdr-right">
+      <div class="progress-text"><strong id="hdr-got">0</strong> / <span id="hdr-total">0</span> conseguidas</div>
+      <div id="sync-status">⏳ Conectando...</div>
+    </div>
   </div>
   <div class="global-progress">
     <div class="progress-bar-wrap"><div class="progress-bar-fill" id="global-bar" style="width:0%"></div></div>
-    <div class="progress-text" id="global-pct">0%</div>
+    <div class="progress-text" id="global-pct" style="font-size:12px;color:var(--muted);">0%</div>
   </div>
 </header>
+
 <div class="tabs">
   <button class="tab active" onclick="showView('album',this)">📚 Álbum <span class="badge" id="tab-missing-badge">0</span></button>
   <button class="tab" onclick="showView('repetidas',this)">🔁 Repetidas <span class="badge" id="tab-rep-badge" style="background:var(--accent)">0</span></button>
   <button class="tab" onclick="showView('progreso',this)">📊 Progreso</button>
+  <button class="tab" onclick="showView('intercambio',this)">🔄 Intercambio</button>
+  <button class="tab" onclick="showView('buscofrezco',this)">📋 Busco/Ofrezco</button>
+  <button class="tab" onclick="showView('stats',this)">📈 Stats</button>
+  <button class="tab" onclick="showView('mapa',this)">🗺️ Mapa</button>
 </div>
+
+<!-- ALBUM -->
 <div class="view active" id="view-album">
   <div class="share-bar">
-    <button class="share-btn wa" onclick="shareWhatsapp()">📲 WhatsApp</button>
-    <button class="share-btn pdf-btn" onclick="sharePDF('original')">📄 PDF (original)</button>
-    <button class="share-btn pdf-btn" style="background:#d97706" onclick="sharePDF('alpha')">📄 PDF (A-Z)</button>
-    <button class="share-btn copy-btn" onclick="copyText()">📋 Copiar texto</button>
+    <button class="share-btn btn-wa" onclick="shareWhatsapp()">📲 WA</button>
+    <button class="share-btn btn-pdf" onclick="sharePDF('original')">📄 PDF</button>
+    <button class="share-btn btn-pdf2" onclick="sharePDF('alpha')">📄 PDF A-Z</button>
+    <button class="share-btn btn-copy" onclick="copyText()">📋 Copiar</button>
+    <button class="share-btn btn-qr" onclick="showQR()">📷 QR</button>
   </div>
   <div class="controls">
     <input class="search-box" type="text" placeholder="🔍 Buscar selección..." id="search-input" oninput="renderAlbum()">
@@ -234,7 +235,11 @@ setSyncStatus('syncing');
   </div>
   <div id="album-container"></div>
 </div>
+
+<!-- REPETIDAS -->
 <div class="view" id="view-repetidas"><div id="rep-container"></div></div>
+
+<!-- PROGRESO -->
 <div class="view" id="view-progreso">
   <div class="summary-bar">
     <div class="sum-item"><div class="sum-val sum-green" id="sum-got">0</div><div class="sum-lbl">Conseguidas</div></div>
@@ -251,11 +256,85 @@ setSyncStatus('syncing');
   </div>
   <div class="progress-grid" id="prog-container"></div>
 </div>
+
+<!-- INTERCAMBIO -->
+<div class="view" id="view-intercambio">
+  <div class="swap-box">
+    <h3>🔄 Modo Intercambio</h3>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;">Pegá la lista de faltantes de otro coleccionista (mismo formato: "MEX 1, MEX 3, ARG 5...") y te digo qué se pueden intercambiar.</p>
+    <textarea class="swap-textarea" id="swap-input" placeholder="Pegá aquí los faltantes del otro coleccionista...&#10;Ejemplo: MEX 1, MEX 3, ARG 5, BRA 12, ESP 7..."></textarea>
+    <button class="share-btn btn-swap" style="margin-top:10px" onclick="calcSwap()">🔄 Calcular intercambio</button>
+  </div>
+  <div id="swap-results"></div>
 </div>
+
+<!-- BUSCO / OFREZCO -->
+<div class="view" id="view-buscofrezco">
+  <div class="ob-share-bar">
+    <button class="share-btn btn-wa" onclick="shareOB('wa')">📲 WA</button>
+    <button class="share-btn btn-copy" onclick="shareOB('copy')">📋 Copiar</button>
+  </div>
+  <div class="ob-grid">
+    <div class="ob-panel ofrezco" id="panel-ofrezco">
+      <h3>🟢 Ofrezco</h3>
+      <div id="ofrezco-content"><div class="empty-state"><span class="emoji" style="font-size:30px">🔁</span><p style="font-size:12px">No tenés repetidas todavía</p></div></div>
+    </div>
+    <div class="ob-panel busco" id="panel-busco">
+      <h3>🔵 Busco</h3>
+      <div id="busco-content"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- STATS -->
+<div class="view" id="view-stats">
+  <div class="summary-bar">
+    <div class="sum-item"><div class="sum-val sum-green" id="st-got">0</div><div class="sum-lbl">Conseguidas</div></div>
+    <div class="sum-item"><div class="sum-val sum-red" id="st-miss">0</div><div class="sum-lbl">Faltantes</div></div>
+    <div class="sum-item"><div class="sum-val sum-yellow" id="st-pct">0%</div><div class="sum-lbl">Completado</div></div>
+    <div class="sum-item"><div class="sum-val sum-blue" id="st-comp">0</div><div class="sum-lbl">Sel. completas</div></div>
+  </div>
+  <div class="charts-grid">
+    <div class="chart-card"><h4>Top 10 — Más completas</h4><canvas id="chart-top10"></canvas></div>
+    <div class="chart-card"><h4>Top 10 — Más faltantes</h4><canvas id="chart-bot10"></canvas></div>
+    <div class="chart-card full"><h4>Progreso por selección (todas)</h4><canvas id="chart-all"></canvas></div>
+    <div class="chart-card full"><h4>Distribución conseguidas vs faltantes</h4><div style="max-width:320px;margin:0 auto"><canvas id="chart-donut" style="max-height:280px"></canvas></div></div>
+  </div>
+</div>
+
+<!-- MAPA -->
+<div class="view" id="view-mapa">
+  <div class="map-wrap">
+    <h3>🗺️ Mapa del Álbum</h3>
+    <div class="map-legend">
+      <span><span class="legend-dot" style="background:#10b981"></span>100% completo</span>
+      <span><span class="legend-dot" style="background:#f59e0b"></span>50–99%</span>
+      <span><span class="legend-dot" style="background:#3b82f6"></span>1–49%</span>
+      <span><span class="legend-dot" style="background:#1e2d45"></span>0%</span>
+      <span><span class="legend-dot" style="background:#374151"></span>No en el álbum</span>
+    </div>
+    <div id="map-container" style="position:relative"></div>
+    <div class="map-tooltip" id="map-tooltip"></div>
+  </div>
+</div>
+
+<!-- Context menu -->
 <div class="ctx-menu" id="ctx-menu">
   <div class="ctx-item warn" id="ctx-add-rep"><span>🔁</span> Agregar repetida</div>
   <div class="ctx-item danger" id="ctx-remove-rep" style="display:none"><span>✕</span> Quitar repetida</div>
 </div>
+
+<!-- QR Modal -->
+<div class="modal-overlay" id="qr-modal">
+  <div class="modal">
+    <h3>📷 QR — Mis Faltantes</h3>
+    <p>Escanealo para ver tu lista de faltantes</p>
+    <div id="qr-container"></div>
+    <button class="modal-close" onclick="document.getElementById('qr-modal').classList.remove('show')">Cerrar</button>
+  </div>
+</div>
+
 <script>
 const RAW={"FWC 2026":["00","FWC 1","FWC 2","FWC 3","FWC 4","FWC 5","FWC 6","FWC 7","FWC 8"],"FIFA MUSEUM":["FWC 9","FWC 10","FWC 11","FWC 12","FWC 13","FWC 14","FWC 15","FWC 16","FWC 17","FWC 18","FWC 19"],"México":Array.from({length:20},(_,i)=>`MEX ${i+1}`),"Sudáfrica":Array.from({length:20},(_,i)=>`RSA ${i+1}`),"Corea del Sur":Array.from({length:20},(_,i)=>`KOR ${i+1}`),"Rep. Checa":Array.from({length:20},(_,i)=>`CZE ${i+1}`),"Canadá":Array.from({length:20},(_,i)=>`CAN ${i+1}`),"Bosnia y Herz.":Array.from({length:20},(_,i)=>`BIH ${i+1}`),"Qatar":Array.from({length:20},(_,i)=>`QAT ${i+1}`),"Suiza":Array.from({length:20},(_,i)=>`SUI ${i+1}`),"Brasil":Array.from({length:20},(_,i)=>`BRA ${i+1}`),"Marruecos":Array.from({length:20},(_,i)=>`MAR ${i+1}`),"Haití":Array.from({length:20},(_,i)=>`HAI ${i+1}`),"Escocia":Array.from({length:20},(_,i)=>`SCO ${i+1}`),"Estados Unidos":Array.from({length:20},(_,i)=>`USA ${i+1}`),"Paraguay":Array.from({length:20},(_,i)=>`PAR ${i+1}`),"Australia":Array.from({length:20},(_,i)=>`AUS ${i+1}`),"Turquía":Array.from({length:20},(_,i)=>`TUR ${i+1}`),"Alemania":Array.from({length:20},(_,i)=>`GER ${i+1}`),"Curazao":Array.from({length:20},(_,i)=>`CUW ${i+1}`),"Costa de Marfil":Array.from({length:20},(_,i)=>`CIV ${i+1}`),"Ecuador":Array.from({length:20},(_,i)=>`ECU ${i+1}`),"Países Bajos":Array.from({length:20},(_,i)=>`NED ${i+1}`),"Japón":Array.from({length:20},(_,i)=>`JPN ${i+1}`),"Suecia":Array.from({length:20},(_,i)=>`SWE ${i+1}`),"Túnez":Array.from({length:20},(_,i)=>`TUN ${i+1}`),"Coca-Cola":Array.from({length:12},(_,i)=>`CC ${i+1}`),"Bélgica":Array.from({length:20},(_,i)=>`BEL ${i+1}`),"Egipto":Array.from({length:20},(_,i)=>`EGY ${i+1}`),"Irán":Array.from({length:20},(_,i)=>`IRN ${i+1}`),"Nueva Zelanda":Array.from({length:20},(_,i)=>`NZL ${i+1}`),"España":Array.from({length:20},(_,i)=>`ESP ${i+1}`),"Cabo Verde":Array.from({length:20},(_,i)=>`CPV ${i+1}`),"Arabia Saudita":Array.from({length:20},(_,i)=>`KSA ${i+1}`),"Uruguay":Array.from({length:20},(_,i)=>`URU ${i+1}`),"Francia":Array.from({length:20},(_,i)=>`FRA ${i+1}`),"Senegal":Array.from({length:20},(_,i)=>`SEN ${i+1}`),"Irak":Array.from({length:20},(_,i)=>`IRQ ${i+1}`),"Noruega":Array.from({length:20},(_,i)=>`NOR ${i+1}`),"Argentina":Array.from({length:20},(_,i)=>`ARG ${i+1}`),"Argelia":Array.from({length:20},(_,i)=>`ALG ${i+1}`),"Austria":Array.from({length:20},(_,i)=>`AUT ${i+1}`),"Jordania":Array.from({length:20},(_,i)=>`JOR ${i+1}`),"Portugal":Array.from({length:20},(_,i)=>`POR ${i+1}`),"Rep. D. Congo":Array.from({length:20},(_,i)=>`COD ${i+1}`),"Uzbekistán":Array.from({length:20},(_,i)=>`UZB ${i+1}`),"Colombia":Array.from({length:20},(_,i)=>`COL ${i+1}`),"Inglaterra":Array.from({length:20},(_,i)=>`ENG ${i+1}`),"Croacia":Array.from({length:20},(_,i)=>`CRO ${i+1}`),"Ghana":Array.from({length:20},(_,i)=>`GHA ${i+1}`),"Panamá":Array.from({length:20},(_,i)=>`PAN ${i+1}`)};
 
@@ -263,12 +342,10 @@ const INITIAL_GOT={"MEX 6":true,"MEX 7":true,"MEX 8":true,"MEX 10":true,"MEX 11"
 
 const STORAGE_KEY='figus_fwc2026_v2';
 function loadState(){try{const s=localStorage.getItem(STORAGE_KEY);if(s)return JSON.parse(s);return{got:{...INITIAL_GOT},repeated:{}};}catch{return{got:{...INITIAL_GOT},repeated:{}};}}
-function saveState(){
-  localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
-  if(typeof window.saveToFirestore==='function') window.saveToFirestore();
-}
+function saveState(){localStorage.setItem(STORAGE_KEY,JSON.stringify(state));if(typeof window.saveToFirestore==='function')window.saveToFirestore();}
 let state=loadState();
 let currentFilter='all',currentSortProg='alpha',collapsedSections={},contextTarget=null;
+const ALL_CODES=new Set(Object.values(RAW).flat());
 function isGot(c){return!!state.got[c];}
 function getRep(c){return state.repeated[c]||0;}
 function totalStickers(){return Object.values(RAW).flat().length;}
@@ -276,243 +353,405 @@ function gotCount(){return Object.keys(state.got).filter(k=>state.got[k]).length
 function repCount(){return Object.values(state.repeated).reduce((a,b)=>a+b,0);}
 function toggleGot(c){if(state.got[c])delete state.got[c];else state.got[c]=true;saveState();refreshAll();}
 function addRep(c){state.repeated[c]=(state.repeated[c]||0)+1;saveState();renderRepetidas();updateHeader();updateTabBadges();}
-function showView(name,tabEl){document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));document.getElementById('view-'+name).classList.add('active');if(tabEl)tabEl.classList.add('active');if(name==='repetidas')renderRepetidas();if(name==='progreso')renderProgreso();}
-function setFilter(f){currentFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));document.getElementById('filter-'+f).classList.add('active');renderAlbum();}
-function getRepCountry(country){return(RAW[country]||[]).reduce((s,c)=>s+getRep(c),0);}
 
+function showView(name,tabEl){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  if(tabEl)tabEl.classList.add('active');
+  if(name==='repetidas')renderRepetidas();
+  if(name==='progreso')renderProgreso();
+  if(name==='buscofrezco')renderBuscoOfrezco();
+  if(name==='stats')renderStats();
+  if(name==='mapa')renderMapa();
+}
+
+function setFilter(f){currentFilter=f;document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));document.getElementById('filter-'+f).classList.add('active');renderAlbum();}
+function getRepCountry(c){return(RAW[c]||[]).reduce((s,x)=>s+getRep(x),0);}
+
+// ===== ALBUM =====
 function renderAlbum(){
   const q=document.getElementById('search-input').value.toLowerCase();
-  const container=document.getElementById('album-container');
-  container.innerHTML='';
+  const con=document.getElementById('album-container');con.innerHTML='';
   for(const[country,stickers]of Object.entries(RAW)){
     if(q&&!country.toLowerCase().includes(q))continue;
     const fs=stickers.filter(c=>{if(currentFilter==='missing')return!isGot(c);if(currentFilter==='got')return isGot(c);return true;});
-    if(fs.length===0)continue;
+    if(!fs.length)continue;
     const gotC=stickers.filter(c=>isGot(c)).length,total=stickers.length,pct=Math.round(gotC/total*100);
-    const isCollapsed=!!collapsedSections[country];
-    const section=document.createElement('div');
-    section.className='country-section'+(isCollapsed?' collapsed':'');
-    section.innerHTML=`<div class="country-header" onclick="toggleCollapse('${country.replace(/'/g,"\\'")}',this.closest('.country-section'))"><div class="country-name">${country}</div><div class="country-stats"><span class="stat-pill pill-got">${gotC}✓</span><span class="stat-pill pill-missing">${total-gotC} faltan</span>${getRepCountry(country)>0?`<span class="stat-pill pill-rep">🔁${getRepCountry(country)}</span>`:''}<div class="mini-progress"><div class="mini-progress-fill" style="width:${pct}%"></div></div><span style="font-size:11px;color:var(--muted)">${pct}%</span><span class="chevron">▼</span></div></div><div class="stickers-grid"></div>`;
-    container.appendChild(section);
-    const grid=section.querySelector('.stickers-grid');
+    const collapsed=!!collapsedSections[country];
+    const sec=document.createElement('div');sec.className='country-section'+(collapsed?' collapsed':'');
+    sec.innerHTML=`<div class="country-header" onclick="toggleCollapse('${country.replace(/'/g,"\\'")}',this.closest('.country-section'))"><div class="country-name">${country}</div><div class="country-stats"><span class="stat-pill pill-got">${gotC}✓</span><span class="stat-pill pill-missing">${total-gotC} faltan</span>${getRepCountry(country)>0?`<span class="stat-pill pill-rep">🔁${getRepCountry(country)}</span>`:''}<div class="mini-progress"><div class="mini-progress-fill" style="width:${pct}%"></div></div><span style="font-size:10px;color:var(--muted)">${pct}%</span><span class="chevron">▼</span></div></div><div class="stickers-grid"></div>`;
+    con.appendChild(sec);
+    const grid=sec.querySelector('.stickers-grid');
     for(const code of fs){
       const got=isGot(code),rep=getRep(code);
-      const card=document.createElement('div');
-      card.className='sticker'+(got?' got':'');
-      const shortCode=code.split(' ').slice(-1)[0];
-      card.innerHTML=`<div class="sticker-code">${shortCode}</div>${rep>0?`<div class="rep-btn">${rep}</div>`:''}`;
+      const card=document.createElement('div');card.className='sticker'+(got?' got':'');
+      const sc=code.split(' ').pop();
+      card.innerHTML=`<div class="sticker-code">${sc}</div>${rep>0?`<div class="rep-dot">${rep}</div>`:''}`;
       card.addEventListener('contextmenu',e=>{e.preventDefault();showCtxMenu(e,code);});
-      // Touch: short tap = toggle, long press = menu
-      let lpTimer=null, lpFired=false;
-      card.addEventListener('touchstart',e=>{
-        lpFired=false;
-        const t=e.touches[0];
-        const sx=t.clientX,sy=t.clientY;
-        lpTimer=setTimeout(()=>{
-          lpFired=true;
-          showCtxMenu({clientX:sx,clientY:sy},code);
-          navigator.vibrate&&navigator.vibrate(40);
-        },500);
-      },{passive:true});
-      card.addEventListener('touchend',e=>{
-        clearTimeout(lpTimer);
-        if(lpFired){e.preventDefault();lpFired=false;return;}
-        toggleGot(code);
-        e.preventDefault(); // prevent ghost click
-      });
-      card.addEventListener('touchmove',()=>{clearTimeout(lpTimer);lpFired=false;});
-      card.addEventListener('click',e=>{
-        if(e.detail===0) return; // synthetic event from touch, skip
-        toggleGot(code);
-      });
+      let lpt=null,lpf=false;
+      card.addEventListener('touchstart',e=>{lpf=false;const t=e.touches[0];const sx=t.clientX,sy=t.clientY;lpt=setTimeout(()=>{lpf=true;showCtxMenu({clientX:sx,clientY:sy},code);navigator.vibrate&&navigator.vibrate(40);},500);},{passive:true});
+      card.addEventListener('touchend',e=>{clearTimeout(lpt);if(lpf){e.preventDefault();lpf=false;return;}toggleGot(code);e.preventDefault();});
+      card.addEventListener('touchmove',()=>{clearTimeout(lpt);lpf=false;});
+      card.addEventListener('click',e=>{if(e.detail===0)return;toggleGot(code);});
       grid.appendChild(card);
     }
   }
 }
+function toggleCollapse(c,s){collapsedSections[c]=!collapsedSections[c];s.classList.toggle('collapsed');}
 
-function toggleCollapse(country,section){collapsedSections[country]=!collapsedSections[country];section.classList.toggle('collapsed');}
-
+// ===== CONTEXT MENU =====
 function showCtxMenu(e,code){
   contextTarget=code;
   const menu=document.getElementById('ctx-menu');
-  const got=isGot(code),rep=getRep(code);
-
-  document.getElementById('ctx-remove-rep').style.display=rep>0?'flex':'none';
-  menu.style.left=Math.min(e.clientX,window.innerWidth-180)+'px';
-  menu.style.top=Math.min(e.clientY,window.innerHeight-120)+'px';
+  document.getElementById('ctx-remove-rep').style.display=getRep(code)>0?'flex':'none';
+  menu.style.left=Math.min(e.clientX,window.innerWidth-170)+'px';
+  menu.style.top=Math.min(e.clientY,window.innerHeight-90)+'px';
   menu.classList.add('show');
 }
-
 document.getElementById('ctx-add-rep').onclick=()=>{if(contextTarget){addRep(contextTarget);hideCtxMenu();}};
-document.getElementById('ctx-remove-rep').onclick=()=>{
-  if(contextTarget){const cur=getRep(contextTarget);if(cur>1)state.repeated[contextTarget]--;else delete state.repeated[contextTarget];saveState();renderRepetidas();renderAlbum();updateHeader();updateTabBadges();hideCtxMenu();}
-};
+document.getElementById('ctx-remove-rep').onclick=()=>{if(contextTarget){const c=getRep(contextTarget);if(c>1)state.repeated[contextTarget]--;else delete state.repeated[contextTarget];saveState();renderRepetidas();renderAlbum();updateHeader();updateTabBadges();hideCtxMenu();}};
 function hideCtxMenu(){document.getElementById('ctx-menu').classList.remove('show');contextTarget=null;}
 document.addEventListener('click',hideCtxMenu);
 document.addEventListener('keydown',e=>{if(e.key==='Escape')hideCtxMenu();});
 
+// ===== REPETIDAS =====
 function renderRepetidas(){
-  const container=document.getElementById('rep-container');container.innerHTML='';
-  let hasAny=false;
+  const con=document.getElementById('rep-container');con.innerHTML='';
+  let any=false;
   for(const[country,stickers]of Object.entries(RAW)){
-    const rs=stickers.filter(c=>getRep(c)>0);if(!rs.length)continue;hasAny=true;
-    const block=document.createElement('div');block.className='rep-country-block';
-    block.innerHTML=`<div class="rep-country-title">${country}</div><div class="rep-stickers"></div>`;
-    container.appendChild(block);
-    const wrap=block.querySelector('.rep-stickers');
-    for(const code of rs){const tag=document.createElement('div');tag.className='rep-tag';tag.innerHTML=`<span>${code}</span><div class="rep-count-ctrl"><button class="rep-btn-ctrl rep-minus" onclick="changeRep('${code}',-1)">−</button><span class="rep-count">${getRep(code)}</span><button class="rep-btn-ctrl rep-plus" onclick="changeRep('${code}',1)">+</button></div>`;wrap.appendChild(tag);}
+    const rs=stickers.filter(c=>getRep(c)>0);if(!rs.length)continue;any=true;
+    const b=document.createElement('div');b.className='rep-country-block';
+    b.innerHTML=`<div class="rep-country-title">${country}</div><div class="rep-stickers"></div>`;
+    con.appendChild(b);
+    const wrap=b.querySelector('.rep-stickers');
+    for(const code of rs){const t=document.createElement('div');t.className='rep-tag';t.innerHTML=`<span>${code}</span><div class="rep-count-ctrl"><button class="rep-btn-ctrl rep-minus" onclick="changeRep('${code}',-1)">−</button><span class="rep-count">${getRep(code)}</span><button class="rep-btn-ctrl rep-plus" onclick="changeRep('${code}',1)">+</button></div>`;wrap.appendChild(t);}
   }
-  if(!hasAny)container.innerHTML=`<div class="empty-state"><span class="emoji">🔁</span><p>No tenés repetidas todavía.<br>Clic derecho en una figura para agregar una repetida.</p></div>`;
+  if(!any)con.innerHTML=`<div class="empty-state"><span class="emoji">🔁</span><p>No tenés repetidas todavía.<br>Mantené presionada una figurita para agregar.</p></div>`;
 }
 function changeRep(code,delta){const nv=(state.repeated[code]||0)+delta;if(nv<=0)delete state.repeated[code];else state.repeated[code]=nv;saveState();renderRepetidas();renderAlbum();updateHeader();updateTabBadges();}
 
+// ===== PROGRESO =====
 function setSortProg(s){currentSortProg=s;document.querySelectorAll('.sort-btn').forEach(b=>b.classList.remove('active'));document.getElementById('sort-'+s).classList.add('active');renderProgreso();}
 function renderProgreso(){
-  const container=document.getElementById('prog-container');container.innerHTML='';
-  let entries=Object.entries(RAW).map(([country,stickers])=>{const got=stickers.filter(c=>isGot(c)).length,total=stickers.length;return{country,got,total,pct:got/total,missing:total-got};});
+  const con=document.getElementById('prog-container');con.innerHTML='';
+  let entries=Object.entries(RAW).map(([c,s])=>{const g=s.filter(x=>isGot(x)).length,t=s.length;return{country:c,got:g,total:t,pct:g/t,missing:t-g};});
   if(currentSortProg==='alpha')entries.sort((a,b)=>a.country.localeCompare(b.country));
   else if(currentSortProg==='pct-asc')entries.sort((a,b)=>a.pct-b.pct);
   else if(currentSortProg==='pct-desc')entries.sort((a,b)=>b.pct-a.pct);
   else if(currentSortProg==='missing')entries.sort((a,b)=>b.missing-a.missing);
-  const completeCount=entries.filter(e=>e.missing===0).length;
+  const cc=entries.filter(e=>e.missing===0).length;
   document.getElementById('sum-got').textContent=gotCount();
   document.getElementById('sum-missing').textContent=totalStickers()-gotCount();
   document.getElementById('sum-rep').textContent=repCount();
-  document.getElementById('sum-complete').textContent=completeCount;
+  document.getElementById('sum-complete').textContent=cc;
   for(const{country,got,total,pct,missing}of entries){
     const pr=Math.round(pct*100),complete=missing===0;
     const card=document.createElement('div');card.className='prog-card'+(complete?' complete':'');
-    card.innerHTML=`<div class="prog-card-header"><div class="prog-country">${complete?'🏆 ':''}${country}</div><div class="prog-pct">${pr}%</div></div><div class="prog-bar-wrap"><div class="prog-bar-inner" style="width:${pr}%"></div></div><div class="prog-sub"><span>✓ ${got} conseguidas</span><span>✗ ${missing} faltantes</span></div>`;
+    card.innerHTML=`<div class="prog-card-header"><div class="prog-country">${complete?'🏆 ':''}${country}</div><div class="prog-pct">${pr}%</div></div><div class="prog-bar-wrap"><div class="prog-bar-inner" style="width:${pr}%"></div></div><div class="prog-sub"><span>✓ ${got}</span><span>✗ ${missing}</span></div>`;
     card.onclick=()=>{showView('album',document.querySelectorAll('.tab')[0]);document.getElementById('search-input').value=country;renderAlbum();};
-    container.appendChild(card);
+    con.appendChild(card);
   }
 }
-function updateHeader(){const got=gotCount(),total=totalStickers(),pct=Math.round(got/total*100);document.getElementById('hdr-got').textContent=got;document.getElementById('hdr-total').textContent=total;document.getElementById('global-bar').style.width=pct+'%';document.getElementById('global-pct').textContent=pct+'%';}
-function updateTabBadges(){document.getElementById('tab-missing-badge').textContent=totalStickers()-gotCount();document.getElementById('tab-rep-badge').textContent=Object.keys(state.repeated).length;}
-function refreshAll(){renderAlbum();updateHeader();updateTabBadges();if(document.getElementById('view-progreso').classList.contains('active'))renderProgreso();if(document.getElementById('view-repetidas').classList.contains('active'))renderRepetidas();}
-updateHeader();updateTabBadges();renderAlbum();
 
-// ========================
-// SHARE FUNCTIONS
-// ========================
+// ===== INTERCAMBIO =====
+function calcSwap(){
+  const raw=document.getElementById('swap-input').value;
+  // Parse codes from input
+  const otherMissing=new Set(raw.toUpperCase().match(/[A-Z]+\s+\d+/g)||[]);
+  const res=document.getElementById('swap-results');
+  if(!otherMissing.size){res.innerHTML='<p style="color:var(--muted);font-size:13px">No se encontraron figus en el texto. Asegurate de pegar el formato correcto (ej: MEX 1, ARG 5...)</p>';return;}
+
+  // What I can give: my repeated that the other person needs
+  const iGive=[];
+  for(const[code,qty]of Object.entries(state.repeated)){
+    if(qty>0&&otherMissing.has(code.toUpperCase()))iGive.push(code);
+  }
+
+  // What I need: my missing that the other person has as repeated (we don't know their repeated, so show my missing that match their missing negation)
+  // Best we can do: my missing codes that are NOT in other's missing = other person likely has them
+  const myMissing=Object.values(RAW).flat().filter(c=>!isGot(c));
+  const iGet=myMissing.filter(c=>!otherMissing.has(c.toUpperCase())).slice(0,50); // they might have these
+
+  res.innerHTML=`<div class="swap-results">
+    <div class="swap-panel give">
+      <h4>🟢 Yo le doy (${iGive.length})</h4>
+      ${iGive.length?iGive.map(c=>`<span class="swap-tag give-tag">${c}</span>`).join(''):'<p class="swap-empty">No tenés repetidas que le sirvan</p>'}
+    </div>
+    <div class="swap-panel need">
+      <h4>🔵 Posibles que me da</h4>
+      <p style="font-size:11px;color:var(--muted);margin-bottom:6px">Estas son tus faltantes que el otro quizás tiene (no están en su lista de faltantes):</p>
+      ${iGet.length?iGet.map(c=>`<span class="swap-tag need-tag">${c}</span>`).join(''):'<p class="swap-empty">Sin matches</p>'}
+    </div>
+  </div>`;
+}
+
+// ===== BUSCO / OFREZCO =====
+function renderBuscoOfrezco(){
+  // Ofrezco: mis repetidas agrupadas por selección
+  const ofCon=document.getElementById('ofrezco-content');ofCon.innerHTML='';
+  let hasRep=false;
+  for(const[country,stickers]of Object.entries(RAW)){
+    const rs=stickers.filter(c=>getRep(c)>0);if(!rs.length)continue;hasRep=true;
+    const d=document.createElement('div');d.className='ob-country';
+    d.innerHTML=`<div class="ob-country-name">${country}</div><div class="ob-codes">${rs.map(c=>`<span class="ob-code">${c.split(' ').pop()}${getRep(c)>1?` x${getRep(c)}`:''}</span>`).join('')}</div>`;
+    ofCon.appendChild(d);
+  }
+  if(!hasRep)ofCon.innerHTML=`<div style="color:var(--muted);font-size:12px">No tenés repetidas aún</div>`;
+
+  // Busco: mis faltantes agrupados por selección
+  const buCon=document.getElementById('busco-content');buCon.innerHTML='';
+  for(const[country,stickers]of Object.entries(RAW)){
+    const ms=stickers.filter(c=>!isGot(c));if(!ms.length)continue;
+    const d=document.createElement('div');d.className='ob-country';
+    d.innerHTML=`<div class="ob-country-name">${country}</div><div class="ob-codes">${ms.map(c=>`<span class="ob-code">${c.split(' ').pop()}</span>`).join('')}</div>`;
+    buCon.appendChild(d);
+  }
+}
+
+function buildOBText(){
+  const lines=['⚽ *FWC 2026 - Intercambio*',''];
+  // Ofrezco
+  lines.push('🟢 *OFREZCO:*');
+  for(const[country,stickers]of Object.entries(RAW)){
+    const rs=stickers.filter(c=>getRep(c)>0);if(!rs.length)continue;
+    lines.push('*'+country+'*: '+rs.map(c=>c.split(' ').pop()+(getRep(c)>1?' x'+getRep(c):'')).join(', '));
+  }
+  lines.push('');
+  // Busco
+  lines.push('🔵 *BUSCO:*');
+  for(const[country,stickers]of Object.entries(RAW)){
+    const ms=stickers.filter(c=>!isGot(c));if(!ms.length)continue;
+    lines.push('*'+country+'*: '+ms.map(c=>c.split(' ').pop()).join(', '));
+  }
+  return lines.join('\n');
+}
+
+function shareOB(mode){
+  const text=buildOBText();
+  if(mode==='wa'){window.open('https://wa.me/?text='+encodeURIComponent(text),'_blank');}
+  else{navigator.clipboard.writeText(text).then(()=>showToast('✅ Copiado!')).catch(()=>{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('✅ Copiado!');});}
+}
+
+// ===== QR =====
+function showQR(){
+  const missing=Object.values(RAW).flat().filter(c=>!isGot(c));
+  const text='FWC2026 BUSCO: '+missing.join(',');
+  const con=document.getElementById('qr-container');con.innerHTML='';
+  if(typeof QRCode==='undefined'){showToast('⏳ Cargando QR...');return;}
+  try{
+    new QRCode(con,{text:text.substring(0,500),width:200,height:200,colorDark:'#0a0e1a',colorLight:'#f1f5f9'});
+  }catch(e){con.innerHTML='<p style="color:var(--muted);font-size:12px">La lista es muy larga para un QR. Usá WhatsApp o Copiar.</p>';}
+  document.getElementById('qr-modal').classList.add('show');
+}
+document.getElementById('qr-modal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('show');});
+
+// ===== SHARE / PDF =====
 function buildMissingText(){
   const lines=['⚽ *FWC 2026 - Mis faltantes*',''];
   let total=0;
   for(const[country,stickers]of Object.entries(RAW)){
-    const missing=stickers.filter(c=>!isGot(c));
-    if(missing.length===0)continue;
-    total+=missing.length;
-    // just show the numbers
-    const nums=missing.map(c=>c.split(' ').pop()).join(', ');
-    lines.push('*'+country+'* ('+missing.length+'): '+nums);
+    const ms=stickers.filter(c=>!isGot(c));if(!ms.length)continue;
+    total+=ms.length;
+    lines.push('*'+country+'* ('+ms.length+'): '+ms.map(c=>c.split(' ').pop()).join(', '));
   }
-  lines.push('');
-  lines.push('_Total: '+total+' figus faltantes_');
+  lines.push('');lines.push('_Total: '+total+' figus faltantes_');
   return lines.join('\n');
 }
-
-function shareWhatsapp(){
-  const text=buildMissingText();
-  const url='https://wa.me/?text='+encodeURIComponent(text);
-  window.open(url,'_blank');
-}
-
-function copyText(){
-  const text=buildMissingText();
-  navigator.clipboard.writeText(text).then(()=>showToast('✅ Copiado al portapapeles')).catch(()=>{
-    // fallback
-    const ta=document.createElement('textarea');
-    ta.value=text;document.body.appendChild(ta);ta.select();
-    document.execCommand('copy');document.body.removeChild(ta);
-    showToast('✅ Copiado al portapapeles');
-  });
-}
+function shareWhatsapp(){window.open('https://wa.me/?text='+encodeURIComponent(buildMissingText()),'_blank');}
+function copyText(){navigator.clipboard.writeText(buildMissingText()).then(()=>showToast('✅ Copiado!')).catch(()=>{const ta=document.createElement('textarea');ta.value=buildMissingText();document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('✅ Copiado!');});}
 
 function sharePDF(order){
-  const {jsPDF}=window.jspdf;
-  if(!jsPDF){showToast('⏳ Cargando PDF...');return;}
+  const {jsPDF}=window.jspdf;if(!jsPDF){showToast('⏳ Cargando PDF...');return;}
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
   const pageW=210,margin=12,colW=(pageW-margin*2-4)/2;
-  let x=margin,y=20;
-
-  // Title
-  doc.setFillColor(22,33,62);
-  doc.rect(0,0,210,16,'F');
-  doc.setTextColor(245,158,11);
-  doc.setFontSize(14);
-  doc.setFont('helvetica','bold');
+  doc.setFillColor(22,33,62);doc.rect(0,0,210,16,'F');
+  doc.setTextColor(245,158,11);doc.setFontSize(14);doc.setFont('helvetica','bold');
   doc.text('FWC 2026 - Figus Faltantes',pageW/2,10,{align:'center'});
-
-  const missing=[];
-  let totalMissing=0;
-  for(const[country,stickers]of Object.entries(RAW)){
-    const ms=stickers.filter(c=>!isGot(c));
-    if(ms.length>0){missing.push({country,codes:ms});totalMissing+=ms.length;}
-  }
-  if(order==='alpha') missing.sort((a,b)=>a.country.localeCompare(b.country,'es'));
-
-  doc.setTextColor(100,116,139);
-  doc.setFontSize(8);
-  doc.setFont('helvetica','normal');
-  doc.text('Total: '+totalMissing+' figus faltantes  |  Generado '+new Date().toLocaleDateString('es-AR'),pageW/2,15,{align:'center'});
-
-  y=22;
-  let col=0;
-
+  const missing=[];let totalM=0;
+  for(const[country,stickers]of Object.entries(RAW)){const ms=stickers.filter(c=>!isGot(c));if(ms.length){missing.push({country,codes:ms});totalM+=ms.length;}}
+  if(order==='alpha')missing.sort((a,b)=>a.country.localeCompare(b.country,'es'));
+  doc.setTextColor(100,116,139);doc.setFontSize(8);doc.setFont('helvetica','normal');
+  doc.text('Total: '+totalM+' faltantes  |  '+new Date().toLocaleDateString('es-AR'),pageW/2,15,{align:'center'});
+  let y=22,col=0,x=margin;
   for(const{country,codes}of missing){
-    // estimate height needed
-    const numRows=Math.ceil(codes.length/10);
-    const blockH=6+numRows*4+3;
-
-    if(y+blockH>285){
-      if(col===0){col=1;x=margin+colW+4;y=22;}
-      else{doc.addPage();col=0;x=margin;y=22;}
-    }
-
-    // Header
-    doc.setFillColor(22,33,62);
-    doc.roundedRect(x,y,colW,5.5,1,1,'F');
-    doc.setTextColor(245,158,11);
-    doc.setFontSize(7);
-    doc.setFont('helvetica','bold');
-    doc.text(country+' ('+codes.length+')',x+2,y+3.8);
-    y+=6;
-
-    // Numbers grid
-    doc.setFont('helvetica','normal');
-    doc.setFontSize(6.5);
-    const nums=codes.map(c=>c.split(' ').pop());
-    let row=[];
-    for(let i=0;i<nums.length;i++){
-      row.push(nums[i]);
-      if(row.length===10||i===nums.length-1){
-        const rowStr=row.join('  ');
-        // alternating bg
-        const rowIdx=Math.floor(i/10);
-        if(rowIdx%2===0){doc.setFillColor(240,244,255);doc.rect(x,y-0.5,colW,4,'F');}
-        doc.setTextColor(30,45,80);
-        doc.text(rowStr,x+2,y+2.5);
-        y+=4;row=[];
-      }
-    }
+    const blockH=6+Math.ceil(codes.length/10)*4+3;
+    if(y+blockH>285){if(col===0){col=1;x=margin+colW+4;y=22;}else{doc.addPage();col=0;x=margin;y=22;}}
+    doc.setFillColor(22,33,62);doc.roundedRect(x,y,colW,5.5,1,1,'F');
+    doc.setTextColor(245,158,11);doc.setFontSize(7);doc.setFont('helvetica','bold');
+    doc.text(country+' ('+codes.length+')',x+2,y+3.8);y+=6;
+    doc.setFont('helvetica','normal');doc.setFontSize(6.5);
+    const nums=codes.map(c=>c.split(' ').pop());let row=[];
+    for(let i=0;i<nums.length;i++){row.push(nums[i]);if(row.length===10||i===nums.length-1){if(Math.floor(i/10)%2===0){doc.setFillColor(240,244,255);doc.rect(x,y-0.5,colW,4,'F');}doc.setTextColor(30,45,80);doc.text(row.join('  '),x+2,y+2.5);y+=4;row=[];}}
     y+=2;
-
-    // Switch column after halfway
-    if(col===0&&missing.indexOf(missing.find(m=>m.country===country))===Math.floor(missing.length/2)-1){
-      col=1;x=margin+colW+4;y=22;
-    }
+    if(col===0&&missing.findIndex(m=>m.country===country)===Math.floor(missing.length/2)-1){col=1;x=margin+colW+4;y=22;}
   }
-
   doc.save('figus_faltantes_'+new Date().toISOString().slice(0,10)+'.pdf');
   showToast('📄 PDF descargado');
 }
 
-function showToast(msg){
-  let t=document.getElementById('toast');
-  if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t);}
-  t.textContent=msg;t.classList.add('show');
-  clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2500);
+// ===== HEADER =====
+function updateHeader(){const g=gotCount(),t=totalStickers(),p=Math.round(g/t*100);document.getElementById('hdr-got').textContent=g;document.getElementById('hdr-total').textContent=t;document.getElementById('global-bar').style.width=p+'%';document.getElementById('global-pct').textContent=p+'%';}
+function updateTabBadges(){document.getElementById('tab-missing-badge').textContent=totalStickers()-gotCount();document.getElementById('tab-rep-badge').textContent=Object.keys(state.repeated).length;}
+function refreshAll(){renderAlbum();updateHeader();updateTabBadges();const av=document.querySelector('.view.active');if(av){if(av.id==='view-progreso')renderProgreso();if(av.id==='view-repetidas')renderRepetidas();if(av.id==='view-buscofrezco')renderBuscoOfrezco();if(av.id==='view-stats')renderStats();if(av.id==='view-mapa')renderMapa();}}
+
+// ===== STATS =====
+let chartInstances={};
+function destroyChart(id){if(chartInstances[id]){chartInstances[id].destroy();delete chartInstances[id];}}
+function renderStats(){
+  const entries=Object.entries(RAW).map(([c,s])=>{const g=s.filter(x=>isGot(x)).length;return{country:c,got:g,total:s.length,pct:Math.round(g/s.length*100),missing:s.length-g};});
+  const complete=entries.filter(e=>e.missing===0).length;
+  document.getElementById('st-got').textContent=gotCount();
+  document.getElementById('st-miss').textContent=totalStickers()-gotCount();
+  document.getElementById('st-pct').textContent=Math.round(gotCount()/totalStickers()*100)+'%';
+  document.getElementById('st-comp').textContent=complete;
+
+  const byPct=[...entries].sort((a,b)=>b.pct-a.pct);
+  const top10=byPct.slice(0,10);
+  const bot10=[...entries].sort((a,b)=>b.missing-a.missing).slice(0,10);
+
+  const CHART_OPTS={responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'#1e2d45'}},y:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'#1e2d45'},max:100}}};
+
+  // Top 10 most complete
+  destroyChart('top10');
+  const ctx1=document.getElementById('chart-top10').getContext('2d');
+  chartInstances['top10']=new Chart(ctx1,{type:'bar',data:{labels:top10.map(e=>e.country),datasets:[{data:top10.map(e=>e.pct),backgroundColor:top10.map(e=>e.pct===100?'#10b981':e.pct>=50?'#f59e0b':'#3b82f6'),borderRadius:4}]},options:{...CHART_OPTS,indexAxis:'y',scales:{x:{...CHART_OPTS.scales.x,max:100},y:{...CHART_OPTS.scales.y,grid:{color:'#1e2d45'}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.x+'% ('+top10[c.dataIndex].got+'/'+top10[c.dataIndex].total+')'}}}}});
+
+  // Top 10 most missing
+  destroyChart('bot10');
+  const ctx2=document.getElementById('chart-bot10').getContext('2d');
+  chartInstances['bot10']=new Chart(ctx2,{type:'bar',data:{labels:bot10.map(e=>e.country),datasets:[{data:bot10.map(e=>e.missing),backgroundColor:'#ef4444',borderRadius:4}]},options:{...CHART_OPTS,indexAxis:'y',scales:{x:{...CHART_OPTS.scales.x,max:20},y:{...CHART_OPTS.scales.y,grid:{color:'#1e2d45'}}},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.x+' faltantes'}}}}});
+
+  // All countries bar
+  destroyChart('all');
+  const sorted=[...entries].sort((a,b)=>b.pct-a.pct);
+  const ctx3=document.getElementById('chart-all').getContext('2d');
+  chartInstances['all']=new Chart(ctx3,{type:'bar',data:{labels:sorted.map(e=>e.country),datasets:[{label:'%',data:sorted.map(e=>e.pct),backgroundColor:sorted.map(e=>e.pct===100?'#10b981':e.pct>=50?'#f59e0b':'#3b82f6'),borderRadius:2}]},options:{responsive:true,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.parsed.y+'%'}}},scales:{x:{ticks:{color:'#64748b',font:{size:8},maxRotation:90},grid:{color:'#1e2d45'}},y:{ticks:{color:'#64748b',font:{size:10}},grid:{color:'#1e2d45'},max:100}}}});
+
+  // Donut
+  destroyChart('donut');
+  const ctx4=document.getElementById('chart-donut').getContext('2d');
+  chartInstances['donut']=new Chart(ctx4,{type:'doughnut',data:{labels:['Conseguidas','Faltantes'],datasets:[{data:[gotCount(),totalStickers()-gotCount()],backgroundColor:['#10b981','#1e2d45'],borderColor:['#10b981','#334155'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:12}}},tooltip:{callbacks:{label:c=>c.label+': '+c.parsed+' ('+Math.round(c.parsed/totalStickers()*100)+'%)'}}}}}});
 }
+
+// ===== MAPA =====
+// Country ISO -> RAW key mapping
+// Map GeoJSON country names -> RAW album keys
+const NAME_MAP={
+  'Mexico':'México','South Africa':'Sudáfrica','South Korea':'Corea del Sur',
+  'Czechia':'Rep. Checa','Czech Republic':'Rep. Checa','Canada':'Canadá',
+  'Bosnia and Herz.':'Bosnia y Herz.','Bosnia and Herzegovina':'Bosnia y Herz.',
+  'Qatar':'Qatar','Switzerland':'Suiza','Brazil':'Brasil','Morocco':'Marruecos',
+  'Haiti':'Haití','Scotland':'Escocia','United States of America':'Estados Unidos',
+  'United States':'Estados Unidos','Paraguay':'Paraguay','Australia':'Australia',
+  'Turkey':'Turquía','Türkiye':'Turquía','Germany':'Alemania',
+  'Ivory Coast':'Costa de Marfil',"Côte d'Ivoire":'Costa de Marfil',
+  'Ecuador':'Ecuador','Netherlands':'Países Bajos','Japan':'Japón',
+  'Sweden':'Suecia','Tunisia':'Túnez','Belgium':'Bélgica','Egypt':'Egipto',
+  'Iran':'Irán','New Zealand':'Nueva Zelanda','Spain':'España',
+  'Cape Verde':'Cabo Verde','Cabo Verde':'Cabo Verde',
+  'Saudi Arabia':'Arabia Saudita','Uruguay':'Uruguay','France':'Francia',
+  'Senegal':'Senegal','Iraq':'Irak','Norway':'Noruega','Argentina':'Argentina',
+  'Algeria':'Argelia','Austria':'Austria','Jordan':'Jordania','Portugal':'Portugal',
+  'Dem. Rep. Congo':'Rep. D. Congo','Democratic Republic of the Congo':'Rep. D. Congo',
+  'Congo, Dem. Rep.':'Rep. D. Congo',
+  'Uzbekistan':'Uzbekistán','Colombia':'Colombia',
+  'England':'Inglaterra','Croatia':'Croacia','Ghana':'Ghana','Panama':'Panamá'
+};
+
+function getCountryColorByName(geoName){
+  const albumName=NAME_MAP[geoName];
+  if(!albumName)return'#374151';
+  const stickers=RAW[albumName]||[];
+  if(!stickers.length)return'#374151';
+  const got=stickers.filter(c=>isGot(c)).length;
+  const pct=got/stickers.length;
+  if(pct===1)return'#10b981';
+  if(pct>=0.5)return'#f59e0b';
+  if(pct>0)return'#3b82f6';
+  return'#1e2d45';
+}
+
+function renderMapa(){
+  const con=document.getElementById('map-container');
+  if(con.querySelector('svg')){
+    con.querySelectorAll('[data-geoname]').forEach(el=>{
+      el.style.fill=getCountryColorByName(el.dataset.geoname);
+    });
+    return;
+  }
+  // Build SVG world map using simplified paths
+  // We use a fetch to get a minimal SVG world map
+  con.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:20px">⏳ Cargando mapa...</p>';
+  fetch('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson')
+    .then(r=>r.json())
+    .then(geo=>drawMapSVG(geo,con))
+    .catch(()=>{con.innerHTML='<p style="color:var(--muted);font-size:13px;text-align:center;padding:20px">No se pudo cargar el mapa. Verificá tu conexión.</p>';});
+}
+
+function drawMapSVG(geo,con){
+  // Simple equirectangular projection
+  const W=800,H=420;
+  const lon2x=lon=>(lon+180)*(W/360);
+  const lat2y=lat=>(90-lat)*(H/180);
+
+  const tooltip=document.getElementById('map-tooltip');
+  let svgPaths='';
+
+  for(const feat of geo.features){
+    const geoName=feat.properties.name||feat.properties.NAME||'';
+    const fill=getCountryColorByName(geoName);
+    const albumName=NAME_MAP[geoName]||'';
+    const stickers=RAW[albumName]||[];
+    const got=albumName?stickers.filter(c=>isGot(c)).length:0;
+    const info=albumName?(got+'/'+stickers.length+' ('+Math.round(got/stickers.length*100)+'%)'):'No en el álbum';
+
+    const geom=feat.geometry;
+    if(!geom)continue;
+    const polys=geom.type==='MultiPolygon'?geom.coordinates:geom.type==='Polygon'?[geom.coordinates]:[];
+    let d='';
+    for(const poly of polys){
+      for(const ring of poly){
+        if(!ring.length)continue;
+        d+='M';
+        for(let i=0;i<ring.length;i++){
+          const [lon,lat]=ring[i];
+          d+=(i?'L':'')+lon2x(lon).toFixed(1)+','+lat2y(lat).toFixed(1);
+        }
+        d+='Z';
+      }
+    }
+    if(!d)continue;
+    svgPaths+=`<path d="${d}" fill="${fill}" stroke="#0a0e1a" stroke-width="0.5" data-geoname="${geoName}" data-name="${albumName||geoName}" data-info="${info}" class="country-path"/>`;
+  }
+
+  const svg=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" id="world-svg" style="background:#0a0e1a;border-radius:8px">${svgPaths}</svg>`;
+  con.innerHTML=svg;
+
+  // Tooltip events
+  con.querySelectorAll('.country-path').forEach(el=>{
+    el.addEventListener('mousemove',e=>{
+      if(!el.dataset.name||el.dataset.name===el.dataset.geoname&&!NAME_MAP[el.dataset.geoname])return;
+      tooltip.style.display='block';
+      tooltip.style.left=Math.min(e.clientX+12,window.innerWidth-180)+'px';
+      tooltip.style.top=(e.clientY-40)+'px';
+      tooltip.innerHTML='<strong>'+(el.dataset.name||el.dataset.geoname)+'</strong><br>'+el.dataset.info;
+    });
+    el.addEventListener('mouseleave',()=>tooltip.style.display='none');
+    el.addEventListener('touchstart',e=>{
+      tooltip.style.display='block';
+      const t=e.touches[0];
+      tooltip.style.left=Math.min(t.clientX+12,window.innerWidth-180)+'px';
+      tooltip.style.top=(t.clientY-50)+'px';
+      tooltip.innerHTML='<strong>'+(el.dataset.name||el.dataset.geoname)+'</strong><br>'+el.dataset.info;
+      setTimeout(()=>tooltip.style.display='none',2500);
+    },{passive:true});
+  });
+}
+
+function showToast(msg){let t=document.getElementById('toast');if(!t){t=document.createElement('div');t.id='toast';t.className='toast';document.body.appendChild(t);}t.textContent=msg;t.classList.add('show');clearTimeout(t._timer);t._timer=setTimeout(()=>t.classList.remove('show'),2500);}
+
+updateHeader();updateTabBadges();renderAlbum();
 </script>
 </body>
 </html>
