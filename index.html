@@ -304,6 +304,18 @@ function renderAlbum(){
       card.innerHTML=`<div class="sticker-code">${shortCode}</div>${rep>0?`<div class="rep-btn">${rep}</div>`:''}`;
       card.addEventListener('click',()=>toggleGot(code));
       card.addEventListener('contextmenu',e=>{e.preventDefault();showCtxMenu(e,code);});
+      // Long press for mobile
+      let lpTimer=null;
+      card.addEventListener('touchstart',e=>{
+        lpTimer=setTimeout(()=>{
+          lpTimer=null;
+          const t=e.touches[0];
+          showCtxMenu({clientX:t.clientX,clientY:t.clientY},code);
+          navigator.vibrate&&navigator.vibrate(40);
+        },500);
+      },{passive:true});
+      card.addEventListener('touchend',()=>{clearTimeout(lpTimer);lpTimer=null;});
+      card.addEventListener('touchmove',()=>{clearTimeout(lpTimer);lpTimer=null;});
       grid.appendChild(card);
     }
   }
