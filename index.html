@@ -253,7 +253,6 @@ setSyncStatus('syncing');
 </div>
 </div>
 <div class="ctx-menu" id="ctx-menu">
-  <div class="ctx-item success" id="ctx-toggle"><span>✓</span> <span id="ctx-toggle-text">Marcar conseguida</span></div>
   <div class="ctx-item warn" id="ctx-add-rep"><span>🔁</span> Agregar repetida</div>
   <div class="ctx-item danger" id="ctx-remove-rep" style="display:none"><span>✕</span> Quitar repetida</div>
 </div>
@@ -302,24 +301,30 @@ function renderAlbum(){
       card.className='sticker'+(got?' got':'');
       const shortCode=code.split(' ').slice(-1)[0];
       card.innerHTML=`<div class="sticker-code">${shortCode}</div>${rep>0?`<div class="rep-btn">${rep}</div>`:''}`;
-      card.addEventListener('click',()=>toggleGot(code));
       card.addEventListener('contextmenu',e=>{e.preventDefault();showCtxMenu(e,code);});
-      // Long press for mobile
-      let lpTimer=null;
+      // Touch: short tap = toggle, long press = menu
+      let lpTimer=null, lpFired=false;
       card.addEventListener('touchstart',e=>{
+        lpFired=false;
         const t=e.touches[0];
-        const startX=t.clientX,startY=t.clientY;
+        const sx=t.clientX,sy=t.clientY;
         lpTimer=setTimeout(()=>{
-          lpTimer=null;
-          showCtxMenu({clientX:startX,clientY:startY},code);
+          lpFired=true;
+          showCtxMenu({clientX:sx,clientY:sy},code);
           navigator.vibrate&&navigator.vibrate(40);
         },500);
       },{passive:true});
       card.addEventListener('touchend',e=>{
-        if(lpTimer===null) e.preventDefault(); // suppress click after long press
+        clearTimeout(lpTimer);
+        if(lpFired){e.preventDefault();lpFired=false;return;}
+        toggleGot(code);
+        e.preventDefault(); // prevent ghost click
       });
-
-      card.addEventListener('touchmove',()=>{clearTimeout(lpTimer);lpTimer=null;});
+      card.addEventListener('touchmove',()=>{clearTimeout(lpTimer);lpFired=false;});
+      card.addEventListener('click',e=>{
+        if(e.detail===0) return; // synthetic event from touch, skip
+        toggleGot(code);
+      });
       grid.appendChild(card);
     }
   }
@@ -331,14 +336,13 @@ function showCtxMenu(e,code){
   contextTarget=code;
   const menu=document.getElementById('ctx-menu');
   const got=isGot(code),rep=getRep(code);
-  document.getElementById('ctx-toggle-text').textContent=got?'Quitar conseguida':'Marcar conseguida';
-  document.getElementById('ctx-toggle').querySelector('span').textContent=got?'✗':'✓';
+
   document.getElementById('ctx-remove-rep').style.display=rep>0?'flex':'none';
   menu.style.left=Math.min(e.clientX,window.innerWidth-180)+'px';
   menu.style.top=Math.min(e.clientY,window.innerHeight-120)+'px';
   menu.classList.add('show');
 }
-document.getElementById('ctx-toggle').onclick=()=>{if(contextTarget){toggleGot(contextTarget);hideCtxMenu();}};
+
 document.getElementById('ctx-add-rep').onclick=()=>{if(contextTarget){addRep(contextTarget);hideCtxMenu();}};
 document.getElementById('ctx-remove-rep').onclick=()=>{
   if(contextTarget){const cur=getRep(contextTarget);if(cur>1)state.repeated[contextTarget]--;else delete state.repeated[contextTarget];saveState();renderRepetidas();renderAlbum();updateHeader();updateTabBadges();hideCtxMenu();}
