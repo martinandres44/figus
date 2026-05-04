@@ -50,7 +50,7 @@
   .country-section.collapsed .chevron{transform:rotate(-90deg);}
   .stickers-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(62px,1fr));gap:6px;padding:12px 16px;}
   .country-section.collapsed .stickers-grid{display:none;}
-  .sticker{position:relative;aspect-ratio:3/4;border-radius:8px;border:2px solid var(--missing);background:var(--surface2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;user-select:none;overflow:hidden;}
+  .sticker{position:relative;aspect-ratio:3/4;border-radius:8px;border:2px solid var(--missing);background:var(--surface2);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;user-select:none;overflow:hidden;touch-action:manipulation;-webkit-touch-callout:none;-webkit-user-select:none;}
   .sticker:hover{transform:scale(1.05);border-color:var(--muted);}
   .sticker.got{border-color:var(--got);background:rgba(16,185,129,0.12);}
   .sticker.got::after{content:'✓';position:absolute;top:2px;right:4px;font-size:9px;color:var(--got);font-weight:700;}
@@ -307,14 +307,18 @@ function renderAlbum(){
       // Long press for mobile
       let lpTimer=null;
       card.addEventListener('touchstart',e=>{
+        const t=e.touches[0];
+        const startX=t.clientX,startY=t.clientY;
         lpTimer=setTimeout(()=>{
           lpTimer=null;
-          const t=e.touches[0];
-          showCtxMenu({clientX:t.clientX,clientY:t.clientY},code);
+          showCtxMenu({clientX:startX,clientY:startY},code);
           navigator.vibrate&&navigator.vibrate(40);
         },500);
       },{passive:true});
-      card.addEventListener('touchend',()=>{clearTimeout(lpTimer);lpTimer=null;});
+      card.addEventListener('touchend',e=>{
+        if(lpTimer===null) e.preventDefault(); // suppress click after long press
+      });
+
       card.addEventListener('touchmove',()=>{clearTimeout(lpTimer);lpTimer=null;});
       grid.appendChild(card);
     }
