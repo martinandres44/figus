@@ -222,7 +222,8 @@ setSyncStatus('syncing');
 <div class="view active" id="view-album">
   <div class="share-bar">
     <button class="share-btn wa" onclick="shareWhatsapp()">📲 WhatsApp</button>
-    <button class="share-btn pdf-btn" onclick="sharePDF()">📄 Bajar PDF</button>
+    <button class="share-btn pdf-btn" onclick="sharePDF('original')">📄 PDF (original)</button>
+    <button class="share-btn pdf-btn" style="background:#d97706" onclick="sharePDF('alpha')">📄 PDF (A-Z)</button>
     <button class="share-btn copy-btn" onclick="copyText()">📋 Copiar texto</button>
   </div>
   <div class="controls">
@@ -407,7 +408,7 @@ function copyText(){
   });
 }
 
-function sharePDF(){
+function sharePDF(order){
   const {jsPDF}=window.jspdf;
   if(!jsPDF){showToast('⏳ Cargando PDF...');return;}
   const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
@@ -428,6 +429,7 @@ function sharePDF(){
     const ms=stickers.filter(c=>!isGot(c));
     if(ms.length>0){missing.push({country,codes:ms});totalMissing+=ms.length;}
   }
+  if(order==='alpha') missing.sort((a,b)=>a.country.localeCompare(b.country,'es'));
 
   doc.setTextColor(100,116,139);
   doc.setFontSize(8);
